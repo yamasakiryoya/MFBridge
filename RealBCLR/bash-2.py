@@ -1,0 +1,142 @@
+#nohup python bash-2.py &
+import os
+import itertools
+import numpy as np
+from multiprocessing import Pool
+
+ACT,LAY,CUDA = "relu",4,-1
+LAMs1 = [i/4.-5. for i in range(25)]
+LAMs2 = [10.**(i/4.-5.) for i in range(25)]
+LAMs3 = [-5,-4,-3,-2,-1,0,1]
+LAMs4 = [10.**i for i in [-5,-4,-3,-2,-1,0,1]]
+DATAs = ["banana","haberman","blood_transfusion_service_center","banknote_authentication","bupa_liver_disorders","irish","mammographic_masses","wilt","phoneme","monk3","monk1","monk2","penguins","raisin","auction_verification_result","rice_cammeo_osmancik","titanic","NHANES_age_prediction","HTRU_2","saheart","threeOf9","profb","breast_cancer_wisconsin_original","tic_tac_toe","xd6","indian_liver_patient","parity5+5","mofn_3_7_10","magic_gamma_telescope","Customer_Churn","credit_approval_australia","adult","congressional_voting_records","thoraric_surgery","early_stage_diabetes_risk","bank+marketing","online_shoppers_purchasing_intention","seismic_bumps","diabetic_retinopathy_debrecen","south_german_credit","churn","ring","twonorm","car_evaluation","cdc_diabetes_health_indicators","mushroom","agaricus_lepiota","glioma+grading+clinical+and+mutation+features","default_of_credit_card_clients","credit_approval_germany","hypothyroid","steel_plates_faults_Bumps","steel_plates_faults_Dirtiness","steel_plates_faults_K-Scatch","steel_plates_faults_Other-Faults","steel_plates_faults_Pastry","steel_plates_faults_Stains","steel_plates_faults_Z-Scratch","breast_cancer_wisconsin_diagnostic","cervical_cancer_Biopsy","cervical_cancer_Citology","cervical_cancer_Hinselmann","cervical_cancer_Schiller","Mesothelioma_disease","ionosphere","chess","qsar_biodegradation","spectf","tokyo1","spambase","coil2000","naticusdroid+android+permissions","taiwanese_bankruptcy_prediction","Hill_Valley_with_noise","Hill_Valley_without_noise"]
+SIZEs = [100]#[25,50,100,200,400]
+METHs = ["NGLasso1-0.0000000000/relu-4","NBridge1-0.1250000000/relu-4-10"]
+"""
+METHs = [["NGLasso1-0.0000000000/relu-4","NBridge1-0.1250000000/relu-4-10"],
+         ["NGLasso1-0.2500000000/relu-4","NBridge1-0.2500000000/relu-4-10"],
+         ["NGLasso1-0.5000000000/relu-4","NBridge1-0.5000000000/relu-4-10"],
+         ["NGLasso1-0.7500000000/relu-4","NBridge1-1.0000000000/relu-4-10"],
+         ["NGLasso1-1.0000000000/relu-4","NBridge1-2.0000000000/relu-4-10"],
+         ["NBridge1-0.1250000000/relu-4-5","NBridge1-0.1250000000/relu-4-20"],
+         ["NBridge1-0.2500000000/relu-4-5","NBridge1-0.2500000000/relu-4-20"],
+         ["NBridge1-0.5000000000/relu-4-5","NBridge1-0.5000000000/relu-4-20"],
+         ["NBridge1-1.0000000000/relu-4-5","NBridge1-1.0000000000/relu-4-20"],
+         ["NBridge1-2.0000000000/relu-4-5","NBridge1-2.0000000000/relu-4-20"]][0]
+"""
+def task(T):
+    #"""(no regularizer)
+    METH = "NGLasso1-0.000000000000/relu-4"
+    for DATA,SIZE,SEED in itertools.product(DATAs,SIZEs,[T]):
+        os.system("python NGLasso1.py --data %s --size %d --alp 0.0 --lam %s --act %s --lay %d --seed %d --cuda %d"%(DATA,SIZE,0.,ACT,LAY,SEED,CUDA))
+    #"""
+    """(default; varying DIM; varying Mnum)
+    for DATA,SIZE,METH in itertools.product(DATAs,SIZEs,METHs):
+        result = np.zeros((len(LAMs2),20))
+        for SEED,l in itertools.product(range(20),range(len(LAMs2))):
+            tmp = np.loadtxt("./Results/%s/%s/size-%d/lam-%.10f/1-seed-%d.csv"%(METH,DATA,SIZE,LAMs2[l],SEED), delimiter=",")
+            result[l,SEED] = np.min(tmp[:,-4])
+        #
+        LAMs = [10.**(i/16.+LAMs1[np.argmin(np.mean(result, axis=1))]) for i in [-3,-2,-1,0,1,2,3]]
+        for SEED,LAM in itertools.product([T],LAMs):
+            print(DATA,SIZE,METH,SEED,LAM)
+            if   METH=="NGLasso1-0.0000000000/relu-4":    os.system("python NGLasso1.py --data %s --size %d --alp 0.0 --lam %s --act %s --lay %d --seed %d --cuda %d"%(DATA,SIZE,LAM,ACT,LAY,SEED,CUDA))
+            elif METH=="NGLasso1-0.2500000000/relu-4":    os.system("python NGLasso1.py --data %s --size %d --alp 0.25 --lam %s --act %s --lay %d --seed %d --cuda %d"%(DATA,SIZE,LAM,ACT,LAY,SEED,CUDA))
+            elif METH=="NGLasso1-0.5000000000/relu-4":    os.system("python NGLasso1.py --data %s --size %d --alp 0.5 --lam %s --act %s --lay %d --seed %d --cuda %d"%(DATA,SIZE,LAM,ACT,LAY,SEED,CUDA))
+            elif METH=="NGLasso1-0.7500000000/relu-4":    os.system("python NGLasso1.py --data %s --size %d --alp 0.75 --lam %s --act %s --lay %d --seed %d --cuda %d"%(DATA,SIZE,LAM,ACT,LAY,SEED,CUDA))
+            elif METH=="NGLasso1-1.0000000000/relu-4":    os.system("python NGLasso1.py --data %s --size %d --alp 1.0 --lam %s --act %s --lay %d --seed %d --cuda %d"%(DATA,SIZE,LAM,ACT,LAY,SEED,CUDA))
+            #
+            elif METH=="NBridge1-0.1250000000/relu-4-5":  os.system("python NBridge1.py --data %s --size %d --alp 0.125 --lam %s --Mnum 5 --act %s --lay %d --seed %d --cuda %d"%(DATA,SIZE,LAM,ACT,LAY,SEED,CUDA))
+            elif METH=="NBridge1-0.2500000000/relu-4-5":  os.system("python NBridge1.py --data %s --size %d --alp 0.25 --lam %s --Mnum 5 --act %s --lay %d --seed %d --cuda %d"%(DATA,SIZE,LAM,ACT,LAY,SEED,CUDA))
+            elif METH=="NBridge1-0.5000000000/relu-4-5":  os.system("python NBridge1.py --data %s --size %d --alp 0.5 --lam %s --Mnum 5 --act %s --lay %d --seed %d --cuda %d"%(DATA,SIZE,LAM,ACT,LAY,SEED,CUDA))
+            elif METH=="NBridge1-1.0000000000/relu-4-5":  os.system("python NBridge1.py --data %s --size %d --alp 1.0 --lam %s --Mnum 5 --act %s --lay %d --seed %d --cuda %d"%(DATA,SIZE,LAM,ACT,LAY,SEED,CUDA))
+            elif METH=="NBridge1-2.0000000000/relu-4-5":  os.system("python NBridge1.py --data %s --size %d --alp 2.0 --lam %s --Mnum 5 --act %s --lay %d --seed %d --cuda %d"%(DATA,SIZE,LAM,ACT,LAY,SEED,CUDA))
+            #
+            elif METH=="NBridge1-0.1250000000/relu-4-10": os.system("python NBridge1.py --data %s --size %d --alp 0.125 --lam %s --Mnum 10 --act %s --lay %d --seed %d --cuda %d"%(DATA,SIZE,LAM,ACT,LAY,SEED,CUDA))
+            elif METH=="NBridge1-0.2500000000/relu-4-10": os.system("python NBridge1.py --data %s --size %d --alp 0.25 --lam %s --Mnum 10 --act %s --lay %d --seed %d --cuda %d"%(DATA,SIZE,LAM,ACT,LAY,SEED,CUDA))
+            elif METH=="NBridge1-0.5000000000/relu-4-10": os.system("python NBridge1.py --data %s --size %d --alp 0.5 --lam %s --Mnum 10 --act %s --lay %d --seed %d --cuda %d"%(DATA,SIZE,LAM,ACT,LAY,SEED,CUDA))
+            elif METH=="NBridge1-1.0000000000/relu-4-10": os.system("python NBridge1.py --data %s --size %d --alp 1.0 --lam %s --Mnum 10 --act %s --lay %d --seed %d --cuda %d"%(DATA,SIZE,LAM,ACT,LAY,SEED,CUDA))
+            elif METH=="NBridge1-2.0000000000/relu-4-10": os.system("python NBridge1.py --data %s --size %d --alp 2.0 --lam %s --Mnum 10 --act %s --lay %d --seed %d --cuda %d"%(DATA,SIZE,LAM,ACT,LAY,SEED,CUDA))
+            #
+            elif METH=="NBridge1-0.1250000000/relu-4-20": os.system("python NBridge1.py --data %s --size %d --alp 0.125 --lam %s --Mnum 20 --act %s --lay %d --seed %d --cuda %d"%(DATA,SIZE,LAM,ACT,LAY,SEED,CUDA))
+            elif METH=="NBridge1-0.2500000000/relu-4-20": os.system("python NBridge1.py --data %s --size %d --alp 0.25 --lam %s --Mnum 20 --act %s --lay %d --seed %d --cuda %d"%(DATA,SIZE,LAM,ACT,LAY,SEED,CUDA))
+            elif METH=="NBridge1-0.5000000000/relu-4-20": os.system("python NBridge1.py --data %s --size %d --alp 0.5 --lam %s --Mnum 20 --act %s --lay %d --seed %d --cuda %d"%(DATA,SIZE,LAM,ACT,LAY,SEED,CUDA))
+            elif METH=="NBridge1-1.0000000000/relu-4-20": os.system("python NBridge1.py --data %s --size %d --alp 1.0 --lam %s --Mnum 20 --act %s --lay %d --seed %d --cuda %d"%(DATA,SIZE,LAM,ACT,LAY,SEED,CUDA))
+            elif METH=="NBridge1-2.0000000000/relu-4-20": os.system("python NBridge1.py --data %s --size %d --alp 2.0 --lam %s --Mnum 20 --act %s --lay %d --seed %d --cuda %d"%(DATA,SIZE,LAM,ACT,LAY,SEED,CUDA))
+    #
+    for DATA,SIZE,METH in itertools.product(DATAs,SIZEs,METHs):
+        result = np.zeros((len(LAMs2),20))
+        for SEED,l in itertools.product(range(20),range(len(LAMs2))):
+            tmp = np.loadtxt("./Results/%s/%s/size-%d/lam-%.10f/1-seed-%d.csv"%(METH,DATA,SIZE,LAMs2[l],SEED), delimiter=",")
+            result[l,SEED] = np.min(tmp[:,-3])
+        #
+        LAMs = [10.**(i/16.+LAMs1[np.argmin(np.mean(result, axis=1))]) for i in [-3,-2,-1,0,1,2,3]]
+        for SEED,LAM in itertools.product([T],LAMs):
+            print(DATA,SIZE,METH,SEED,LAM)
+            if   METH=="NGLasso1-0.0000000000/relu-4":    os.system("python NGLasso1.py --data %s --size %d --alp 0.0 --lam %s --act %s --lay %d --seed %d --cuda %d"%(DATA,SIZE,LAM,ACT,LAY,SEED,CUDA))
+            elif METH=="NGLasso1-0.2500000000/relu-4":    os.system("python NGLasso1.py --data %s --size %d --alp 0.25 --lam %s --act %s --lay %d --seed %d --cuda %d"%(DATA,SIZE,LAM,ACT,LAY,SEED,CUDA))
+            elif METH=="NGLasso1-0.5000000000/relu-4":    os.system("python NGLasso1.py --data %s --size %d --alp 0.5 --lam %s --act %s --lay %d --seed %d --cuda %d"%(DATA,SIZE,LAM,ACT,LAY,SEED,CUDA))
+            elif METH=="NGLasso1-0.7500000000/relu-4":    os.system("python NGLasso1.py --data %s --size %d --alp 0.75 --lam %s --act %s --lay %d --seed %d --cuda %d"%(DATA,SIZE,LAM,ACT,LAY,SEED,CUDA))
+            elif METH=="NGLasso1-1.0000000000/relu-4":    os.system("python NGLasso1.py --data %s --size %d --alp 1.0 --lam %s --act %s --lay %d --seed %d --cuda %d"%(DATA,SIZE,LAM,ACT,LAY,SEED,CUDA))
+            #
+            elif METH=="NBridge1-0.1250000000/relu-4-5":  os.system("python NBridge1.py --data %s --size %d --alp 0.125 --lam %s --Mnum 5 --act %s --lay %d --seed %d --cuda %d"%(DATA,SIZE,LAM,ACT,LAY,SEED,CUDA))
+            elif METH=="NBridge1-0.2500000000/relu-4-5":  os.system("python NBridge1.py --data %s --size %d --alp 0.25 --lam %s --Mnum 5 --act %s --lay %d --seed %d --cuda %d"%(DATA,SIZE,LAM,ACT,LAY,SEED,CUDA))
+            elif METH=="NBridge1-0.5000000000/relu-4-5":  os.system("python NBridge1.py --data %s --size %d --alp 0.5 --lam %s --Mnum 5 --act %s --lay %d --seed %d --cuda %d"%(DATA,SIZE,LAM,ACT,LAY,SEED,CUDA))
+            elif METH=="NBridge1-1.0000000000/relu-4-5":  os.system("python NBridge1.py --data %s --size %d --alp 1.0 --lam %s --Mnum 5 --act %s --lay %d --seed %d --cuda %d"%(DATA,SIZE,LAM,ACT,LAY,SEED,CUDA))
+            elif METH=="NBridge1-2.0000000000/relu-4-5":  os.system("python NBridge1.py --data %s --size %d --alp 2.0 --lam %s --Mnum 5 --act %s --lay %d --seed %d --cuda %d"%(DATA,SIZE,LAM,ACT,LAY,SEED,CUDA))
+            #
+            elif METH=="NBridge1-0.1250000000/relu-4-10": os.system("python NBridge1.py --data %s --size %d --alp 0.125 --lam %s --Mnum 10 --act %s --lay %d --seed %d --cuda %d"%(DATA,SIZE,LAM,ACT,LAY,SEED,CUDA))
+            elif METH=="NBridge1-0.2500000000/relu-4-10": os.system("python NBridge1.py --data %s --size %d --alp 0.25 --lam %s --Mnum 10 --act %s --lay %d --seed %d --cuda %d"%(DATA,SIZE,LAM,ACT,LAY,SEED,CUDA))
+            elif METH=="NBridge1-0.5000000000/relu-4-10": os.system("python NBridge1.py --data %s --size %d --alp 0.5 --lam %s --Mnum 10 --act %s --lay %d --seed %d --cuda %d"%(DATA,SIZE,LAM,ACT,LAY,SEED,CUDA))
+            elif METH=="NBridge1-1.0000000000/relu-4-10": os.system("python NBridge1.py --data %s --size %d --alp 1.0 --lam %s --Mnum 10 --act %s --lay %d --seed %d --cuda %d"%(DATA,SIZE,LAM,ACT,LAY,SEED,CUDA))
+            elif METH=="NBridge1-2.0000000000/relu-4-10": os.system("python NBridge1.py --data %s --size %d --alp 2.0 --lam %s --Mnum 10 --act %s --lay %d --seed %d --cuda %d"%(DATA,SIZE,LAM,ACT,LAY,SEED,CUDA))
+            #
+            elif METH=="NBridge1-0.1250000000/relu-4-20": os.system("python NBridge1.py --data %s --size %d --alp 0.125 --lam %s --Mnum 20 --act %s --lay %d --seed %d --cuda %d"%(DATA,SIZE,LAM,ACT,LAY,SEED,CUDA))
+            elif METH=="NBridge1-0.2500000000/relu-4-20": os.system("python NBridge1.py --data %s --size %d --alp 0.25 --lam %s --Mnum 20 --act %s --lay %d --seed %d --cuda %d"%(DATA,SIZE,LAM,ACT,LAY,SEED,CUDA))
+            elif METH=="NBridge1-0.5000000000/relu-4-20": os.system("python NBridge1.py --data %s --size %d --alp 0.5 --lam %s --Mnum 20 --act %s --lay %d --seed %d --cuda %d"%(DATA,SIZE,LAM,ACT,LAY,SEED,CUDA))
+            elif METH=="NBridge1-1.0000000000/relu-4-20": os.system("python NBridge1.py --data %s --size %d --alp 1.0 --lam %s --Mnum 20 --act %s --lay %d --seed %d --cuda %d"%(DATA,SIZE,LAM,ACT,LAY,SEED,CUDA))
+            elif METH=="NBridge1-2.0000000000/relu-4-20": os.system("python NBridge1.py --data %s --size %d --alp 2.0 --lam %s --Mnum 20 --act %s --lay %d --seed %d --cuda %d"%(DATA,SIZE,LAM,ACT,LAY,SEED,CUDA))
+    """
+    """(NNSGLasso weight-decay)
+    for DATA,SIZE,METH in itertools.product(DATAs,SIZEs,METHs):
+        result = np.zeros((len(LAMs2),len(LAMs4),20))
+        for SEED,l,m in itertools.product(range(20),range(len(LAMs2)),range(len(LAMs4))):
+            tmp = np.loadtxt("./Results/%s/%s/size-%d/lam-%.10f-%.10f/1-seed-%d.csv"%(METH,DATA,SIZE,LAMs2[l],LAMs4[m],SEED), delimiter=",")
+            result[l,m,SEED] = np.min(tmp[:,-4])
+        tmpA, tmpB, tmpC = 0, 0, 10.**8
+        for l,m in itertools.product(range(len(LAMs2)),range(len(LAMs4))):
+            if np.mean(result, axis=2)[l,m]<tmpC: tmpA=l; tmpB=m; tmpC=np.mean(result, axis=2)[l,m]
+        #
+        LAMsA = [10.**(i/16.+LAMs1[tmpA]) for i in [-3,-2,-1,0,1,2,3]]; LAMsB = [10.**LAMs3[tmpB]]
+        for SEED,LAM1,LAM2 in itertools.product([T],LAMsA,LAMsB):
+            print(DATA,SIZE,METH,SEED,LAM1,LAM2)
+            if   METH=="NGLasso2-0.0000000000/relu-4": os.system("python NGLasso2.py --data %s --size %d --alp 0.0 --lam1 %s --lam2 %s --act %s --lay %d --seed %d --cuda %d"%(DATA,SIZE,LAM1,LAM2,ACT,LAY,SEED,CUDA))
+            elif METH=="NGLasso2-0.2500000000/relu-4": os.system("python NGLasso2.py --data %s --size %d --alp 0.25 --lam1 %s --lam2 %s --act %s --lay %d --seed %d --cuda %d"%(DATA,SIZE,LAM1,LAM2,ACT,LAY,SEED,CUDA))
+            elif METH=="NGLasso2-0.5000000000/relu-4": os.system("python NGLasso2.py --data %s --size %d --alp 0.5 --lam1 %s --lam2 %s --act %s --lay %d --seed %d --cuda %d"%(DATA,SIZE,LAM1,LAM2,ACT,LAY,SEED,CUDA))
+            elif METH=="NGLasso2-0.7500000000/relu-4": os.system("python NGLasso2.py --data %s --size %d --alp 0.75 --lam1 %s --lam2 %s --act %s --lay %d --seed %d --cuda %d"%(DATA,SIZE,LAM1,LAM2,ACT,LAY,SEED,CUDA))
+            elif METH=="NGLasso2-1.0000000000/relu-4": os.system("python NGLasso2.py --data %s --size %d --alp 1.0 --lam1 %s --lam2 %s --act %s --lay %d --seed %d --cuda %d"%(DATA,SIZE,LAM1,LAM2,ACT,LAY,SEED,CUDA))
+    #
+    for DATA,SIZE,METH in itertools.product(DATAs,SIZEs,METHs):
+        result = np.zeros((len(LAMs2),len(LAMs4),20))
+        for SEED,l,m in itertools.product(range(20),range(len(LAMs2)),range(len(LAMs4))):
+            tmp = np.loadtxt("./Results/%s/%s/size-%d/lam-%.10f-%.10f/1-seed-%d.csv"%(METH,DATA,SIZE,LAMs2[l],LAMs4[m],SEED), delimiter=",")
+            result[l,m,SEED] = np.min(tmp[:,-3])
+        tmpA, tmpB, tmpC = 0, 0, 10.**8
+        for l,m in itertools.product(range(len(LAMs2)),range(len(LAMs4))):
+            if np.mean(result, axis=2)[l,m]<tmpC: tmpA=l; tmpB=m; tmpC=np.mean(result, axis=2)[l,m]
+        #
+        LAMsA = [10.**(i/16.+LAMs1[tmpA]) for i in [-3,-2,-1,0,1,2,3]]; LAMsB = [10.**LAMs3[tmpB]]
+        for SEED,LAM1,LAM2 in itertools.product([T],LAMsA,LAMsB):
+            print(DATA,SIZE,METH,SEED,LAM1,LAM2)
+            if   METH=="NGLasso2-0.0000000000/relu-4": os.system("python NGLasso2.py --data %s --size %d --alp 0.0 --lam1 %s --lam2 %s --act %s --lay %d --seed %d --cuda %d"%(DATA,SIZE,LAM1,LAM2,ACT,LAY,SEED,CUDA))
+            elif METH=="NGLasso2-0.2500000000/relu-4": os.system("python NGLasso2.py --data %s --size %d --alp 0.25 --lam1 %s --lam2 %s --act %s --lay %d --seed %d --cuda %d"%(DATA,SIZE,LAM1,LAM2,ACT,LAY,SEED,CUDA))
+            elif METH=="NGLasso2-0.5000000000/relu-4": os.system("python NGLasso2.py --data %s --size %d --alp 0.5 --lam1 %s --lam2 %s --act %s --lay %d --seed %d --cuda %d"%(DATA,SIZE,LAM1,LAM2,ACT,LAY,SEED,CUDA))
+            elif METH=="NGLasso2-0.7500000000/relu-4": os.system("python NGLasso2.py --data %s --size %d --alp 0.75 --lam1 %s --lam2 %s --act %s --lay %d --seed %d --cuda %d"%(DATA,SIZE,LAM1,LAM2,ACT,LAY,SEED,CUDA))
+            elif METH=="NGLasso2-1.0000000000/relu-4": os.system("python NGLasso2.py --data %s --size %d --alp 1.0 --lam1 %s --lam2 %s --act %s --lay %d --seed %d --cuda %d"%(DATA,SIZE,LAM1,LAM2,ACT,LAY,SEED,CUDA))
+    """
+
+
+
+if __name__ == '__main__':
+    p = Pool(20)
+    p.map(task, range(20))
