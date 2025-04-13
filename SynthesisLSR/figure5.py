@@ -46,9 +46,9 @@ def func(TYPEs,METHs,METHs2,DIMs):
         plt.savefig("./Figures/figure5/%s_%s_dim-%d_size-%d_Rloss.png"%(METHs2[me],TYPE,DIM,SIZEs[si]), bbox_inches="tight", pad_inches=.02, dpi=200, facecolor=fig.get_facecolor(), edgecolor='none'); plt.close()
 #
 TYPEs = ["non-additive-sq2"]
-METHs = ["NGLasso1-0.0000000000/relu-4"   ,"NGLasso1-0.2500000000/relu-4"   ,"NGLasso1-0.5000000000/relu-4"   ,"NGLasso1-0.7500000000/relu-4"   ,"NGLasso1-1.0000000000/relu-4",
-         "NBridge1-0.1250000000/relu-4-10","NBridge1-0.2500000000/relu-4-10","NBridge1-0.5000000000/relu-4-10","NBridge1-1.0000000000/relu-4-10","NBridge1-2.0000000000/relu-4-10"]
-METHs2= ["NGLasso1-0.0000000000"   ,"NGLasso1-0.2500000000"   ,"NGLasso1-0.5000000000"   ,"NGLasso1-0.7500000000"   ,"NGLasso1-1.0000000000",
-         "NBridge1-0.1250000000-10","NBridge1-0.2500000000-10","NBridge1-0.5000000000-10","NBridge1-1.0000000000-10","NBridge1-2.0000000000-10"]
+METHs = ["NGLasso-0.0000000000/relu-4"   ,"NGLasso-0.2500000000/relu-4"   ,"NGLasso-0.5000000000/relu-4"   ,"NGLasso-0.7500000000/relu-4"   ,"NGLasso-1.0000000000/relu-4",
+         "NBridge-0.1250000000/relu-4-10","NBridge-0.2500000000/relu-4-10","NBridge-0.5000000000/relu-4-10","NBridge-1.0000000000/relu-4-10","NBridge-2.0000000000/relu-4-10"]
+METHs2= ["NGLasso-0.0000000000"   ,"NGLasso-0.2500000000"   ,"NGLasso-0.5000000000"   ,"NGLasso-0.7500000000"   ,"NGLasso-1.0000000000",
+         "NBridge-0.1250000000-10","NBridge-0.2500000000-10","NBridge-0.5000000000-10","NBridge-1.0000000000-10","NBridge-2.0000000000-10"]
 DIMs   = [10]#5,20
 func(TYPEs,METHs,METHs2,DIMs)

@@ -22,7 +22,7 @@ def func(TYPEs,METHs,DIMs):
         #
         res = np.zeros((len(METHs),len(LAMs2),SEED))
         for me,la,se in itertools.product(range(len(METHs)),range(len(LAMs2)),range(SEED)):
-            tmp = np.loadtxt("./Results/%s/%s/dim-%d/size-%d/lam-%.10f/1-seed-%d.csv"%(METHs[me],TYPE,DIM,SIZEs[si],LAMs2[la],se), delimiter=",")
+            tmp = np.loadtxt("./Results/%s/%s/dim-%d/size-%d/lam-%.10f/seed-%d.csv"%(METHs[me],TYPE,DIM,SIZEs[si],LAMs2[la],se), delimiter=",")
             res[me,la,se] = tmp[np.argmin(tmp[:,-4]),-2]
         #
         k = 0
@@ -57,11 +57,11 @@ def func(TYPEs,METHs,DIMs):
         #
         abc = np.zeros((len(METHs),3,SEED))
         for me,se in itertools.product(range(len(METHs)),range(SEED)):
-            tmp = np.loadtxt("./Results/%s/%s/dim-%d/size-%d/lam-%.10f/1-seed-%d.csv"%("NGLasso1-0.0000000000/relu-4",TYPE,DIM,SIZEs[si],0,se), delimiter=",")
+            tmp = np.loadtxt("./Results/%s/%s/dim-%d/size-%d/lam-%.10f/seed-%d.csv"%("NGLasso-0.0000000000/relu-4",TYPE,DIM,SIZEs[si],0,se), delimiter=",")
             abc[me,0,se] = np.min(tmp[:,-4])
-            tmp = np.loadtxt("./Results/%s/%s/dim-%d/size-%d/lam-%.10f/1-seed-%d.csv"%(METHs[me],TYPE,DIM,SIZEs[si],LAMs2[0],se), delimiter=",")
+            tmp = np.loadtxt("./Results/%s/%s/dim-%d/size-%d/lam-%.10f/seed-%d.csv"%(METHs[me],TYPE,DIM,SIZEs[si],LAMs2[0],se), delimiter=",")
             abc[me,1,se] = tmp[np.argmin(tmp[:,-4]),1]
-            tmp = np.loadtxt("./Results/%s/%s/dim-%d/size-%d/lam-%.10f/1-seed-%d.csv"%(METHs[2],TYPE,DIM,SIZEs[si],LAMs2[-1],se), delimiter=",")
+            tmp = np.loadtxt("./Results/%s/%s/dim-%d/size-%d/lam-%.10f/seed-%d.csv"%(METHs[2],TYPE,DIM,SIZEs[si],LAMs2[-1],se), delimiter=",")
             abc[me,2,se] = np.min(tmp[:,-4])
         BOT = ax.get_ylim()[0]; TOP = ax.get_ylim()[1]
         for me  in range(len(METHs)):
@@ -75,7 +75,7 @@ def func(TYPEs,METHs,DIMs):
         #
         res = np.zeros((len(METHs),len(LAMs2),SEED))
         for me,la,se in itertools.product(range(len(METHs)),range(len(LAMs2)),range(SEED)):
-            tmp = np.loadtxt("./Results/%s/%s/dim-%d/size-%d/lam-%.10f/1-seed-%d.csv"%(METHs[me],TYPE,DIM,SIZEs[si],LAMs2[la],se), delimiter=",")
+            tmp = np.loadtxt("./Results/%s/%s/dim-%d/size-%d/lam-%.10f/seed-%d.csv"%(METHs[me],TYPE,DIM,SIZEs[si],LAMs2[la],se), delimiter=",")
             res[me,la,se] = tmp[np.argmin(tmp[:,-3]),-1]
         #
         k = 0
@@ -110,11 +110,11 @@ def func(TYPEs,METHs,DIMs):
         #
         abc = np.zeros((len(METHs),3,SEED))
         for me,se in itertools.product(range(len(METHs)),range(SEED)):
-            tmp = np.loadtxt("./Results/%s/%s/dim-%d/size-%d/lam-%.10f/1-seed-%d.csv"%("NGLasso1-0.0000000000/relu-4",TYPE,DIM,SIZEs[si],0,se), delimiter=",")
+            tmp = np.loadtxt("./Results/%s/%s/dim-%d/size-%d/lam-%.10f/seed-%d.csv"%("NGLasso-0.0000000000/relu-4",TYPE,DIM,SIZEs[si],0,se), delimiter=",")
             abc[me,0,se] = np.min(tmp[:,-4])
-            tmp = np.loadtxt("./Results/%s/%s/dim-%d/size-%d/lam-%.10f/1-seed-%d.csv"%(METHs[me],TYPE,DIM,SIZEs[si],LAMs2[0],se), delimiter=",")
+            tmp = np.loadtxt("./Results/%s/%s/dim-%d/size-%d/lam-%.10f/seed-%d.csv"%(METHs[me],TYPE,DIM,SIZEs[si],LAMs2[0],se), delimiter=",")
             abc[me,1,se] = tmp[np.argmin(tmp[:,-4]),1]
-            tmp = np.loadtxt("./Results/%s/%s/dim-%d/size-%d/lam-%.10f/1-seed-%d.csv"%(METHs[2],TYPE,DIM,SIZEs[si],LAMs2[-1],se), delimiter=",")
+            tmp = np.loadtxt("./Results/%s/%s/dim-%d/size-%d/lam-%.10f/seed-%d.csv"%(METHs[2],TYPE,DIM,SIZEs[si],LAMs2[-1],se), delimiter=",")
             abc[me,2,se] = np.min(tmp[:,-4])
         BOT = ax.get_ylim()[0]; TOP = ax.get_ylim()[1]
         for me  in range(len(METHs)):
@@ -125,7 +125,7 @@ def func(TYPEs,METHs,DIMs):
         plt.savefig("./Figures/figure2/MFBridge_%s_dim-%d_size-%d_miscla.png"%(TYPE,DIM,SIZEs[si]), bbox_inches="tight", pad_inches=.02, dpi=200, facecolor=fig.get_facecolor(), edgecolor='none'); plt.close()
 #
 TYPEs = ["non-additive-sq2"]
-METHs = ["NBridge1-0.1250000000/relu-4-10","NBridge1-0.2500000000/relu-4-10","NBridge1-0.5000000000/relu-4-10","NBridge1-1.0000000000/relu-4-10","NBridge1-2.0000000000/relu-4-10"]
+METHs = ["NBridge-0.1250000000/relu-4-10","NBridge-0.2500000000/relu-4-10","NBridge-0.5000000000/relu-4-10","NBridge-1.0000000000/relu-4-10","NBridge-2.0000000000/relu-4-10"]
 DIMs   = [10]#5,20
 func(TYPEs,METHs,DIMs)
 #==================================================#
@@ -135,7 +135,7 @@ def func(TYPEs,METHs,DIMs):
         #
         res = np.zeros((len(METHs),len(LAMs2),SEED))
         for me,la,se in itertools.product(range(len(METHs)),range(len(LAMs2)),range(SEED)):
-            tmp = np.loadtxt("./Results/%s/%s/dim-%d/size-%d/lam-%.10f/1-seed-%d.csv"%(METHs[me],TYPE,DIM,SIZEs[si],LAMs2[la],se), delimiter=",")
+            tmp = np.loadtxt("./Results/%s/%s/dim-%d/size-%d/lam-%.10f/seed-%d.csv"%(METHs[me],TYPE,DIM,SIZEs[si],LAMs2[la],se), delimiter=",")
             res[me,la,se] = tmp[np.argmin(tmp[:,-4]),-2]
         #
         k = 0
@@ -170,11 +170,11 @@ def func(TYPEs,METHs,DIMs):
         #
         abc = np.zeros((len(METHs),3,SEED))
         for me,se in itertools.product(range(len(METHs)),range(SEED)):
-            tmp = np.loadtxt("./Results/%s/%s/dim-%d/size-%d/lam-%.10f/1-seed-%d.csv"%("NGLasso1-0.0000000000/relu-4",TYPE,DIM,SIZEs[si],0,se), delimiter=",")
+            tmp = np.loadtxt("./Results/%s/%s/dim-%d/size-%d/lam-%.10f/seed-%d.csv"%("NGLasso-0.0000000000/relu-4",TYPE,DIM,SIZEs[si],0,se), delimiter=",")
             abc[me,0,se] = np.min(tmp[:,-4])
-            tmp = np.loadtxt("./Results/%s/%s/dim-%d/size-%d/lam-%.10f/1-seed-%d.csv"%(METHs[me],TYPE,DIM,SIZEs[si],LAMs2[0],se), delimiter=",")
+            tmp = np.loadtxt("./Results/%s/%s/dim-%d/size-%d/lam-%.10f/seed-%d.csv"%(METHs[me],TYPE,DIM,SIZEs[si],LAMs2[0],se), delimiter=",")
             abc[me,1,se] = tmp[np.argmin(tmp[:,-4]),1]
-            tmp = np.loadtxt("./Results/%s/%s/dim-%d/size-%d/lam-%.10f/1-seed-%d.csv"%(METHs[me],TYPE,DIM,SIZEs[si],LAMs2[-1],se), delimiter=",")
+            tmp = np.loadtxt("./Results/%s/%s/dim-%d/size-%d/lam-%.10f/seed-%d.csv"%(METHs[me],TYPE,DIM,SIZEs[si],LAMs2[-1],se), delimiter=",")
             abc[me,2,se] = np.min(tmp[:,-4])
         BOT = ax.get_ylim()[0]; TOP = ax.get_ylim()[1]
         for me  in range(len(METHs)):
@@ -188,7 +188,7 @@ def func(TYPEs,METHs,DIMs):
         #
         res = np.zeros((len(METHs),len(LAMs2),SEED))
         for me,la,se in itertools.product(range(len(METHs)),range(len(LAMs2)),range(SEED)):
-            tmp = np.loadtxt("./Results/%s/%s/dim-%d/size-%d/lam-%.10f/1-seed-%d.csv"%(METHs[me],TYPE,DIM,SIZEs[si],LAMs2[la],se), delimiter=",")
+            tmp = np.loadtxt("./Results/%s/%s/dim-%d/size-%d/lam-%.10f/seed-%d.csv"%(METHs[me],TYPE,DIM,SIZEs[si],LAMs2[la],se), delimiter=",")
             res[me,la,se] = tmp[np.argmin(tmp[:,-3]),-1]
         #
         k = 0
@@ -223,11 +223,11 @@ def func(TYPEs,METHs,DIMs):
         #
         abc = np.zeros((len(METHs),3,SEED))
         for me,se in itertools.product(range(len(METHs)),range(SEED)):
-            tmp = np.loadtxt("./Results/%s/%s/dim-%d/size-%d/lam-%.10f/1-seed-%d.csv"%("NGLasso1-0.0000000000/relu-4",TYPE,DIM,SIZEs[si],0,se), delimiter=",")
+            tmp = np.loadtxt("./Results/%s/%s/dim-%d/size-%d/lam-%.10f/seed-%d.csv"%("NGLasso-0.0000000000/relu-4",TYPE,DIM,SIZEs[si],0,se), delimiter=",")
             abc[me,0,se] = np.min(tmp[:,-4])
-            tmp = np.loadtxt("./Results/%s/%s/dim-%d/size-%d/lam-%.10f/1-seed-%d.csv"%(METHs[me],TYPE,DIM,SIZEs[si],LAMs2[0],se), delimiter=",")
+            tmp = np.loadtxt("./Results/%s/%s/dim-%d/size-%d/lam-%.10f/seed-%d.csv"%(METHs[me],TYPE,DIM,SIZEs[si],LAMs2[0],se), delimiter=",")
             abc[me,1,se] = tmp[np.argmin(tmp[:,-4]),1]
-            tmp = np.loadtxt("./Results/%s/%s/dim-%d/size-%d/lam-%.10f/1-seed-%d.csv"%(METHs[me],TYPE,DIM,SIZEs[si],LAMs2[-1],se), delimiter=",")
+            tmp = np.loadtxt("./Results/%s/%s/dim-%d/size-%d/lam-%.10f/seed-%d.csv"%(METHs[me],TYPE,DIM,SIZEs[si],LAMs2[-1],se), delimiter=",")
             abc[me,2,se] = np.min(tmp[:,-4])
         BOT = ax.get_ylim()[0]; TOP = ax.get_ylim()[1]
         for me  in range(len(METHs)):
@@ -238,6 +238,6 @@ def func(TYPEs,METHs,DIMs):
         plt.savefig("./Figures/figure2/NNSGLasso_%s_dim-%d_size-%d_miscla.png"%(TYPE,DIM,SIZEs[si]), bbox_inches="tight", pad_inches=.02, dpi=200, facecolor=fig.get_facecolor(), edgecolor='none'); plt.close()
 #
 TYPEs = ["non-additive-sq2"]
-METHs = ["NGLasso1-0.0000000000/relu-4"   ,"NGLasso1-0.2500000000/relu-4"   ,"NGLasso1-0.5000000000/relu-4"   ,"NGLasso1-0.7500000000/relu-4"   ,"NGLasso1-1.0000000000/relu-4"]
+METHs = ["NGLasso-0.0000000000/relu-4"   ,"NGLasso-0.2500000000/relu-4"   ,"NGLasso-0.5000000000/relu-4"   ,"NGLasso-0.7500000000/relu-4"   ,"NGLasso-1.0000000000/relu-4"]
 DIMs   = [10]#5,20
 func(TYPEs,METHs,DIMs)

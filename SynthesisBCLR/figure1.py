@@ -22,7 +22,7 @@ def func(TYPEs,METHs,DIMs):
         # ERM
         res = np.zeros((len(SIZEs),SEED))
         for si,se in itertools.product(range(len(SIZEs)),range(SEED)):
-            tmp = np.loadtxt("./Results/NGLasso1-0.0000000000/relu-4/%s/dim-%d/size-%d/lam-%.10f/1-seed-%d.csv"%(TYPE,DIM,SIZEs[si],0.0,se), delimiter=",")
+            tmp = np.loadtxt("./Results/NGLasso-0.0000000000/relu-4/%s/dim-%d/size-%d/lam-%.10f/seed-%d.csv"%(TYPE,DIM,SIZEs[si],0.0,se), delimiter=",")
             res[si,se] = tmp[np.argmin(tmp[:,-4]),-2]
         #
         bp0 = ax.boxplot([res[0],res[1],res[2],res[3],res[4]], positions=[0,1,2,3,4], patch_artist=True, widths=0.5, medianprops=dict(color="k", linewidth=1.5), whiskerprops=dict(color="k", linewidth=1.5), capprops=dict(color="k", linewidth=1.5), flierprops=dict(markeredgecolor="k", markeredgewidth=1, marker="x"), boxprops={'fill': None}, showfliers=False)
@@ -36,7 +36,7 @@ def func(TYPEs,METHs,DIMs):
             for me in range(5):
                 result = np.zeros((len(LAMs2),20))
                 for se,la in itertools.product(range(SEED),range(len(LAMs2))):
-                    tmp = np.loadtxt("./Results/%s/%s/dim-%d/size-%d/lam-%.10f/1-seed-%d.csv"%(METHs[me],TYPE,DIM,SIZEs[si],LAMs2[la],se), delimiter=",")
+                    tmp = np.loadtxt("./Results/%s/%s/dim-%d/size-%d/lam-%.10f/seed-%d.csv"%(METHs[me],TYPE,DIM,SIZEs[si],LAMs2[la],se), delimiter=",")
                     tmp1[se], tmp2[se] = np.min(tmp[:,-4]), tmp[np.argmin(tmp[:,-4]),-2]
                     if tmp1[se]<tmp3[se]: tmp3[se] = tmp1[se]; res[si,se] = tmp2[se]
         #
@@ -51,7 +51,7 @@ def func(TYPEs,METHs,DIMs):
             for me in range(5):
                 result = np.zeros((len(LAMs2),20))
                 for se,la in itertools.product(range(SEED),range(len(LAMs2))):
-                    tmp = np.loadtxt("./Results/%s/%s/dim-%d/size-%d/lam-%.10f/1-seed-%d.csv"%(METHs[me+5],TYPE,DIM,SIZEs[si],LAMs2[la],se), delimiter=",")
+                    tmp = np.loadtxt("./Results/%s/%s/dim-%d/size-%d/lam-%.10f/seed-%d.csv"%(METHs[me+5],TYPE,DIM,SIZEs[si],LAMs2[la],se), delimiter=",")
                     tmp1[se], tmp2[se] = np.min(tmp[:,-4]), tmp[np.argmin(tmp[:,-4]),-2]
                     if tmp1[se]<tmp3[se]: tmp3[se] = tmp1[se]; res[si,se] = tmp2[se]
         #
@@ -65,7 +65,7 @@ def func(TYPEs,METHs,DIMs):
             tmp1, tmp2, tmp3 = np.zeros(SEED), np.zeros(SEED), 10.**8*np.ones(SEED)
             result = np.zeros((len(LAMs2),20))
             for se,la in itertools.product(range(SEED),range(len(LAMs2))):
-                tmp = np.loadtxt("./Results/LBridge1-1.0000000000/%s/dim-%d/size-%d/lam-%.10f/1-seed-%d.csv"%(TYPE,DIM,SIZEs[si],LAMs2[la],se), delimiter=",")
+                tmp = np.loadtxt("./Results/LBridge-1.0000000000/%s/dim-%d/size-%d/lam-%.10f/seed-%d.csv"%(TYPE,DIM,SIZEs[si],LAMs2[la],se), delimiter=",")
                 tmp1[se], tmp2[se] = np.min(tmp[:,-4]), tmp[np.argmin(tmp[:,-4]),-2]
                 if tmp1[se]<tmp3[se]: tmp3[se] = tmp1[se]; res[si,se] = tmp2[se]
         #
@@ -79,7 +79,7 @@ def func(TYPEs,METHs,DIMs):
             tmp1, tmp2, tmp3 = np.zeros(SEED), np.zeros(SEED), 10.**8*np.ones(SEED)
             result = np.zeros((len(LAMs2),20))
             for se,la in itertools.product(range(SEED),range(len(LAMs2))):
-                tmp = np.loadtxt("./Results/ABridge1-1.0000000000/relu-4/%s/dim-%d/size-%d/lam-%.10f/1-seed-%d.csv"%(TYPE,DIM,SIZEs[si],LAMs2[la],se), delimiter=",")
+                tmp = np.loadtxt("./Results/ABridge-1.0000000000/relu-4/%s/dim-%d/size-%d/lam-%.10f/seed-%d.csv"%(TYPE,DIM,SIZEs[si],LAMs2[la],se), delimiter=",")
                 tmp1[se], tmp2[se] = np.min(tmp[:,-4]), tmp[np.argmin(tmp[:,-4]),-2]
                 if tmp1[se]<tmp3[se]: tmp3[se] = tmp1[se]; res[si,se] = tmp2[se]
         #
@@ -90,7 +90,7 @@ def func(TYPEs,METHs,DIMs):
         # random forest
         res = np.zeros((len(SIZEs),SEED))
         for si,se in itertools.product(range(len(SIZEs)),range(SEED)):
-            tmp = np.loadtxt("./Results/RandomForest/%s/dim-%d/size-%d/1-seed-%d.csv"%(TYPE,DIM,SIZEs[si],se), delimiter=",")
+            tmp = np.loadtxt("./Results/RandomForest/%s/dim-%d/size-%d/seed-%d.csv"%(TYPE,DIM,SIZEs[si],se), delimiter=",")
             res[si,se] = tmp[-2]
         #
         bp5 = ax.boxplot([res[0],res[1],res[2],res[3],res[4]], positions=[0,1,2,3,4], patch_artist=True, widths=0.5, medianprops=dict(color="gold", linewidth=1.5), whiskerprops=dict(color="gold", linewidth=1.5), capprops=dict(color="gold", linewidth=1.5), flierprops=dict(markeredgecolor="gold", markeredgewidth=1, marker="x"), boxprops={'fill': None}, showfliers=False)
@@ -100,7 +100,7 @@ def func(TYPEs,METHs,DIMs):
         # oracle
         res = np.zeros((len(SIZEs),SEED))
         for si,se in itertools.product(range(len(SIZEs)),range(SEED)):
-            tmp = np.loadtxt("./Results/NGLasso1-0.0000000000/relu-4/%s/dim-%d/size-%d/lam-%.10f/1-seed-%d.csv"%(TYPE,3,SIZEs[si],0.0,se), delimiter=",")
+            tmp = np.loadtxt("./Results/NGLasso-0.0000000000/relu-4/%s/dim-%d/size-%d/lam-%.10f/seed-%d.csv"%(TYPE,3,SIZEs[si],0.0,se), delimiter=",")
             res[si,se] = tmp[np.argmin(tmp[:,-4]),-2]
         #
         bp6 = ax.boxplot([res[0],res[1],res[2],res[3],res[4]], positions=[0,1,2,3,4], patch_artist=True, widths=0.5, medianprops=dict(color="m", linewidth=1.5), whiskerprops=dict(color="m", linewidth=1.5), capprops=dict(color="m", linewidth=1.5), flierprops=dict(markeredgecolor="m", markeredgewidth=1, marker="x"), boxprops={'fill': None}, showfliers=False)
@@ -115,7 +115,7 @@ def func(TYPEs,METHs,DIMs):
         # ERM
         res = np.zeros((len(SIZEs),SEED))
         for si,se in itertools.product(range(len(SIZEs)),range(SEED)):
-            tmp = np.loadtxt("./Results/NGLasso1-0.0000000000/relu-4/%s/dim-%d/size-%d/lam-%.10f/1-seed-%d.csv"%(TYPE,DIM,SIZEs[si],0.0,se), delimiter=",")
+            tmp = np.loadtxt("./Results/NGLasso-0.0000000000/relu-4/%s/dim-%d/size-%d/lam-%.10f/seed-%d.csv"%(TYPE,DIM,SIZEs[si],0.0,se), delimiter=",")
             res[si,se] = tmp[np.argmin(tmp[:,-3]),-1]
         #
         bp0 = ax.boxplot([res[0],res[1],res[2],res[3],res[4]], positions=[0,1,2,3,4], patch_artist=True, widths=0.5, medianprops=dict(color="k", linewidth=1.5), whiskerprops=dict(color="k", linewidth=1.5), capprops=dict(color="k", linewidth=1.5), flierprops=dict(markeredgecolor="k", markeredgewidth=1, marker="x"), boxprops={'fill': None}, showfliers=False)
@@ -129,7 +129,7 @@ def func(TYPEs,METHs,DIMs):
             for me in range(5):
                 result = np.zeros((len(LAMs2),20))
                 for se,la in itertools.product(range(SEED),range(len(LAMs2))):
-                    tmp = np.loadtxt("./Results/%s/%s/dim-%d/size-%d/lam-%.10f/1-seed-%d.csv"%(METHs[me],TYPE,DIM,SIZEs[si],LAMs2[la],se), delimiter=",")
+                    tmp = np.loadtxt("./Results/%s/%s/dim-%d/size-%d/lam-%.10f/seed-%d.csv"%(METHs[me],TYPE,DIM,SIZEs[si],LAMs2[la],se), delimiter=",")
                     tmp1[se], tmp2[se] = np.min(tmp[:,-3]), tmp[np.argmin(tmp[:,-3]),-1]
                     if tmp1[se]<tmp3[se]: tmp3[se] = tmp1[se]; res[si,se] = tmp2[se]
         #
@@ -144,7 +144,7 @@ def func(TYPEs,METHs,DIMs):
             for me in range(5):
                 result = np.zeros((len(LAMs2),20))
                 for se,la in itertools.product(range(SEED),range(len(LAMs2))):
-                    tmp = np.loadtxt("./Results/%s/%s/dim-%d/size-%d/lam-%.10f/1-seed-%d.csv"%(METHs[me+5],TYPE,DIM,SIZEs[si],LAMs2[la],se), delimiter=",")
+                    tmp = np.loadtxt("./Results/%s/%s/dim-%d/size-%d/lam-%.10f/seed-%d.csv"%(METHs[me+5],TYPE,DIM,SIZEs[si],LAMs2[la],se), delimiter=",")
                     tmp1[se], tmp2[se] = np.min(tmp[:,-3]), tmp[np.argmin(tmp[:,-3]),-1]
                     if tmp1[se]<tmp3[se]: tmp3[se] = tmp1[se]; res[si,se] = tmp2[se]
         #
@@ -158,7 +158,7 @@ def func(TYPEs,METHs,DIMs):
             tmp1, tmp2, tmp3 = np.zeros(SEED), np.zeros(SEED), 10.**8*np.ones(SEED)
             result = np.zeros((len(LAMs2),20))
             for se,la in itertools.product(range(SEED),range(len(LAMs2))):
-                tmp = np.loadtxt("./Results/LBridge1-1.0000000000/%s/dim-%d/size-%d/lam-%.10f/1-seed-%d.csv"%(TYPE,DIM,SIZEs[si],LAMs2[la],se), delimiter=",")
+                tmp = np.loadtxt("./Results/LBridge-1.0000000000/%s/dim-%d/size-%d/lam-%.10f/seed-%d.csv"%(TYPE,DIM,SIZEs[si],LAMs2[la],se), delimiter=",")
                 tmp1[se], tmp2[se] = np.min(tmp[:,-3]), tmp[np.argmin(tmp[:,-3]),-1]
                 if tmp1[se]<tmp3[se]: tmp3[se] = tmp1[se]; res[si,se] = tmp2[se]
         #
@@ -172,7 +172,7 @@ def func(TYPEs,METHs,DIMs):
             tmp1, tmp2, tmp3 = np.zeros(SEED), np.zeros(SEED), 10.**8*np.ones(SEED)
             result = np.zeros((len(LAMs2),20))
             for se,la in itertools.product(range(SEED),range(len(LAMs2))):
-                tmp = np.loadtxt("./Results/ABridge1-1.0000000000/relu-4/%s/dim-%d/size-%d/lam-%.10f/1-seed-%d.csv"%(TYPE,DIM,SIZEs[si],LAMs2[la],se), delimiter=",")
+                tmp = np.loadtxt("./Results/ABridge-1.0000000000/relu-4/%s/dim-%d/size-%d/lam-%.10f/seed-%d.csv"%(TYPE,DIM,SIZEs[si],LAMs2[la],se), delimiter=",")
                 tmp1[se], tmp2[se] = np.min(tmp[:,-3]), tmp[np.argmin(tmp[:,-3]),-1]
                 if tmp1[se]<tmp3[se]: tmp3[se] = tmp1[se]; res[si,se] = tmp2[se]
         #
@@ -183,7 +183,7 @@ def func(TYPEs,METHs,DIMs):
         # random forest
         res = np.zeros((len(SIZEs),SEED))
         for si,se in itertools.product(range(len(SIZEs)),range(SEED)):
-            tmp = np.loadtxt("./Results/RandomForest/%s/dim-%d/size-%d/1-seed-%d.csv"%(TYPE,DIM,SIZEs[si],se), delimiter=",")
+            tmp = np.loadtxt("./Results/RandomForest/%s/dim-%d/size-%d/seed-%d.csv"%(TYPE,DIM,SIZEs[si],se), delimiter=",")
             res[si,se] = tmp[-1]
         #
         bp5 = ax.boxplot([res[0],res[1],res[2],res[3],res[4]], positions=[0,1,2,3,4], patch_artist=True, widths=0.5, medianprops=dict(color="gold", linewidth=1.5), whiskerprops=dict(color="gold", linewidth=1.5), capprops=dict(color="gold", linewidth=1.5), flierprops=dict(markeredgecolor="gold", markeredgewidth=1, marker="x"), boxprops={'fill': None}, showfliers=False)
@@ -193,7 +193,7 @@ def func(TYPEs,METHs,DIMs):
         # oracle
         res = np.zeros((len(SIZEs),SEED))
         for si,se in itertools.product(range(len(SIZEs)),range(SEED)):
-            tmp = np.loadtxt("./Results/NGLasso1-0.0000000000/relu-4/%s/dim-%d/size-%d/lam-%.10f/1-seed-%d.csv"%(TYPE,3,SIZEs[si],0.0,se), delimiter=",")
+            tmp = np.loadtxt("./Results/NGLasso-0.0000000000/relu-4/%s/dim-%d/size-%d/lam-%.10f/seed-%d.csv"%(TYPE,3,SIZEs[si],0.0,se), delimiter=",")
             res[si,se] = tmp[np.argmin(tmp[:,-3]),-1]
         #
         bp6 = ax.boxplot([res[0],res[1],res[2],res[3],res[4]], positions=[0,1,2,3,4], patch_artist=True, widths=0.5, medianprops=dict(color="m", linewidth=1.5), whiskerprops=dict(color="m", linewidth=1.5), capprops=dict(color="m", linewidth=1.5), flierprops=dict(markeredgecolor="m", markeredgewidth=1, marker="x"), boxprops={'fill': None}, showfliers=False)
@@ -205,13 +205,13 @@ def func(TYPEs,METHs,DIMs):
         plt.savefig("./Figures/figure1/%s_dim-%d_miscla.png"%(TYPE,DIM), bbox_inches="tight", pad_inches=.02, dpi=200, facecolor=fig.get_facecolor(), edgecolor='none'); plt.close()
 #
 TYPEs = ["non-additive-sq2"]
-METHs = ["NBridge1-0.1250000000/relu-4-10","NBridge1-0.2500000000/relu-4-10","NBridge1-0.5000000000/relu-4-10","NBridge1-1.0000000000/relu-4-10","NBridge1-2.0000000000/relu-4-10",
-         "NGLasso1-0.0000000000/relu-4"   ,"NGLasso1-0.2500000000/relu-4"   ,"NGLasso1-0.5000000000/relu-4"   ,"NGLasso1-0.7500000000/relu-4"   ,"NGLasso1-1.0000000000/relu-4"   ]
+METHs = ["NBridge-0.1250000000/relu-4-10","NBridge-0.2500000000/relu-4-10","NBridge-0.5000000000/relu-4-10","NBridge-1.0000000000/relu-4-10","NBridge-2.0000000000/relu-4-10",
+         "NGLasso-0.0000000000/relu-4"   ,"NGLasso-0.2500000000/relu-4"   ,"NGLasso-0.5000000000/relu-4"   ,"NGLasso-0.7500000000/relu-4"   ,"NGLasso-1.0000000000/relu-4"   ]
 DIMs   = [10]
 func(TYPEs,METHs,DIMs)
 #
 TYPEs = ["non-additive-sq2"]
-METHs = ["NBridge1-0.1250000000/relu-4-10","NBridge1-0.2500000000/relu-4-10","NBridge1-0.5000000000/relu-4-10","NBridge1-1.0000000000/relu-4-10","NBridge1-2.0000000000/relu-4-10",
-         "NGLasso1-0.0000000000/relu-4"   ,"NGLasso1-0.2500000000/relu-4"   ,"NGLasso1-0.5000000000/relu-4"   ,"NGLasso1-0.7500000000/relu-4"   ,"NGLasso1-1.0000000000/relu-4"   ]
+METHs = ["NBridge-0.1250000000/relu-4-10","NBridge-0.2500000000/relu-4-10","NBridge-0.5000000000/relu-4-10","NBridge-1.0000000000/relu-4-10","NBridge-2.0000000000/relu-4-10",
+         "NGLasso-0.0000000000/relu-4"   ,"NGLasso-0.2500000000/relu-4"   ,"NGLasso-0.5000000000/relu-4"   ,"NGLasso-0.7500000000/relu-4"   ,"NGLasso-1.0000000000/relu-4"   ]
 DIMs  = [5,20]
 func(TYPEs,METHs,DIMs)

@@ -22,7 +22,7 @@ def func(TYPEs,DIMs):
         fs = np.zeros((5,DIM,SEED))
         # MFBridge
         res = np.zeros((5,len(LAMs2),SEED))
-        METHs = ["NBridge1-0.1250000000/relu-4-10","NBridge1-0.2500000000/relu-4-10","NBridge1-0.5000000000/relu-4-10","NBridge1-1.0000000000/relu-4-10","NBridge1-2.0000000000/relu-4-10"]
+        METHs = ["NBridge-0.1250000000/relu-4-10","NBridge-0.2500000000/relu-4-10","NBridge-0.5000000000/relu-4-10","NBridge-1.0000000000/relu-4-10","NBridge-2.0000000000/relu-4-10"]
         for me,la,se in itertools.product(range(5),range(len(LAMs2)),range(SEED)):
             tmp = np.loadtxt("./Results/%s/%s/dim-%d/size-%d/lam-%.10f/seed-%d.csv"%(METHs[me],TYPE,DIM,SIZEs[si],LAMs2[la],se), delimiter=",")
             res[me,la,se] = np.min(tmp[:,-2])
@@ -32,7 +32,7 @@ def func(TYPEs,DIMs):
             fs[0,:,se] = tmp[np.argmin(tmp[:,-2]),3:-2]; fs[0,:,se] /= np.max(fs[0,:,se])
         # GSLasso
         res = np.zeros((5,len(LAMs2),SEED))
-        METHs = ["NGLasso1-0.0000000000/relu-4","NGLasso1-0.2500000000/relu-4","NGLasso1-0.5000000000/relu-4","NGLasso1-0.7500000000/relu-4","NGLasso1-1.0000000000/relu-4"]
+        METHs = ["NGLasso-0.0000000000/relu-4","NGLasso-0.2500000000/relu-4","NGLasso-0.5000000000/relu-4","NGLasso-0.7500000000/relu-4","NGLasso-1.0000000000/relu-4"]
         for me,la,se in itertools.product(range(5),range(len(LAMs2)),range(SEED)):
             tmp = np.loadtxt("./Results/%s/%s/dim-%d/size-%d/lam-%.10f/seed-%d.csv"%(METHs[me],TYPE,DIM,SIZEs[si],LAMs2[la],se), delimiter=",")
             res[me,la,se] = np.min(tmp[:,-2])
@@ -43,20 +43,20 @@ def func(TYPEs,DIMs):
         # Lasso
         res = np.zeros((len(LAMs2),SEED))
         for la,se in itertools.product(range(len(LAMs2)),range(SEED)):
-            tmp = np.loadtxt("./Results/LBridge1-1.0000000000/%s/dim-%d/size-%d/lam-%.10f/seed-%d.csv"%(TYPE,DIM,SIZEs[si],LAMs2[la],se), delimiter=",")
+            tmp = np.loadtxt("./Results/LBridge-1.0000000000/%s/dim-%d/size-%d/lam-%.10f/seed-%d.csv"%(TYPE,DIM,SIZEs[si],LAMs2[la],se), delimiter=",")
             res[la,se] = np.min(tmp[:,-2])
         for se in range(SEED):
             idx = np.argmin(res[:,se])
-            tmp = np.loadtxt("./Results/LBridge1-1.0000000000/%s/dim-%d/size-%d/lam-%.10f/seed-%d.csv"%(TYPE,DIM,SIZEs[si],LAMs2[idx],se), delimiter=",")
+            tmp = np.loadtxt("./Results/LBridge-1.0000000000/%s/dim-%d/size-%d/lam-%.10f/seed-%d.csv"%(TYPE,DIM,SIZEs[si],LAMs2[idx],se), delimiter=",")
             fs[2,:,se] = tmp[np.argmin(tmp[:,-2]),3:-2]; fs[2,:,se] /= np.max(fs[2,:,se])
         # SpAM
         res = np.zeros((len(LAMs2),SEED))
         for la,se in itertools.product(range(len(LAMs2)),range(SEED)):
-            tmp = np.loadtxt("./Results/ABridge1-1.0000000000/relu-4-10/%s/dim-%d/size-%d/lam-%.10f/seed-%d.csv"%(TYPE,DIM,SIZEs[si],LAMs2[la],se), delimiter=",")
+            tmp = np.loadtxt("./Results/ABridge-1.0000000000/relu-4-10/%s/dim-%d/size-%d/lam-%.10f/seed-%d.csv"%(TYPE,DIM,SIZEs[si],LAMs2[la],se), delimiter=",")
             res[la,se] = np.min(tmp[:,-2])
         for se in range(SEED):
             idx = np.argmin(res[:,se])
-            tmp = np.loadtxt("./Results/ABridge1-1.0000000000/relu-4-10/%s/dim-%d/size-%d/lam-%.10f/seed-%d.csv"%(TYPE,DIM,SIZEs[si],LAMs2[idx],se), delimiter=",")
+            tmp = np.loadtxt("./Results/ABridge-1.0000000000/relu-4-10/%s/dim-%d/size-%d/lam-%.10f/seed-%d.csv"%(TYPE,DIM,SIZEs[si],LAMs2[idx],se), delimiter=",")
             fs[3,:,se] = tmp[np.argmin(tmp[:,-2]),3:-2]; fs[3,:,se] /= np.max(fs[3,:,se])
         # random forest
         for se in range(SEED):

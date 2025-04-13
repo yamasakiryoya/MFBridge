@@ -22,12 +22,12 @@ def func(TYPEs,METHs,METHs2,DIMs):
         #
         res = np.zeros((len(LAMs2),SEED))
         for la,se in itertools.product(range(len(LAMs2)),range(SEED)):
-            tmp = np.loadtxt("./Results/%s/%s/dim-%d/size-%d/lam-%.10f/1-seed-%d.csv"%(METHs[me],TYPE,DIM,SIZEs[si],LAMs2[la],se), delimiter=",")
+            tmp = np.loadtxt("./Results/%s/%s/dim-%d/size-%d/lam-%.10f/seed-%d.csv"%(METHs[me],TYPE,DIM,SIZEs[si],LAMs2[la],se), delimiter=",")
             res[la,se] = np.min(tmp[:,-4])
         optla = LAMs2[np.argmin(np.mean(res[la,:]))]
         LC = np.zeros((500,4,20))
         for se in range(SEED):
-            tmp = np.loadtxt("./Results/%s/%s/dim-%d/size-%d/lam-%.10f/1-seed-%d.csv"%(METHs[me],TYPE,DIM,SIZEs[si],optla,se), delimiter=",")
+            tmp = np.loadtxt("./Results/%s/%s/dim-%d/size-%d/lam-%.10f/seed-%d.csv"%(METHs[me],TYPE,DIM,SIZEs[si],optla,se), delimiter=",")
             LC[:,0,se] = tmp[:,0]
             LC[:,1,se] = tmp[:,-4]
             LC[:,2,se] = tmp[:,1]
@@ -46,10 +46,10 @@ def func(TYPEs,METHs,METHs2,DIMs):
         plt.savefig("./Figures/figure5/%s_%s_dim-%d_size-%d_Closs.png"%(METHs2[me],TYPE,DIM,SIZEs[si]), bbox_inches="tight", pad_inches=.02, dpi=200, facecolor=fig.get_facecolor(), edgecolor='none'); plt.close()
 #
 TYPEs = ["non-additive-sq2"]
-METHs = ["NGLasso1-0.0000000000/relu-4"   ,"NGLasso1-0.2500000000/relu-4"   ,"NGLasso1-0.5000000000/relu-4"   ,"NGLasso1-0.7500000000/relu-4"   ,"NGLasso1-1.0000000000/relu-4",
-         "NBridge1-0.1250000000/relu-4-10","NBridge1-0.2500000000/relu-4-10","NBridge1-0.5000000000/relu-4-10","NBridge1-1.0000000000/relu-4-10","NBridge1-2.0000000000/relu-4-10"]
-METHs2= ["NGLasso1-0.0000000000"   ,"NGLasso1-0.2500000000"   ,"NGLasso1-0.5000000000"   ,"NGLasso1-0.7500000000"   ,"NGLasso1-1.0000000000",
-         "NBridge1-0.1250000000-10","NBridge1-0.2500000000-10","NBridge1-0.5000000000-10","NBridge1-1.0000000000-10","NBridge1-2.0000000000-10"]
+METHs = ["NGLasso-0.0000000000/relu-4"   ,"NGLasso-0.2500000000/relu-4"   ,"NGLasso-0.5000000000/relu-4"   ,"NGLasso-0.7500000000/relu-4"   ,"NGLasso-1.0000000000/relu-4",
+         "NBridge-0.1250000000/relu-4-10","NBridge-0.2500000000/relu-4-10","NBridge-0.5000000000/relu-4-10","NBridge-1.0000000000/relu-4-10","NBridge-2.0000000000/relu-4-10"]
+METHs2= ["NGLasso-0.0000000000"   ,"NGLasso-0.2500000000"   ,"NGLasso-0.5000000000"   ,"NGLasso-0.7500000000"   ,"NGLasso-1.0000000000",
+         "NBridge-0.1250000000-10","NBridge-0.2500000000-10","NBridge-0.5000000000-10","NBridge-1.0000000000-10","NBridge-2.0000000000-10"]
 DIMs   = [10]#5,20
 func(TYPEs,METHs,METHs2,DIMs)
 #==================================================#
@@ -59,12 +59,12 @@ def func(TYPEs,METHs,METHs2,DIMs):
         #
         res = np.zeros((len(LAMs2),SEED))
         for la,se in itertools.product(range(len(LAMs2)),range(SEED)):
-            tmp = np.loadtxt("./Results/%s/%s/dim-%d/size-%d/lam-%.10f/1-seed-%d.csv"%(METHs[me],TYPE,DIM,SIZEs[si],LAMs2[la],se), delimiter=",")
+            tmp = np.loadtxt("./Results/%s/%s/dim-%d/size-%d/lam-%.10f/seed-%d.csv"%(METHs[me],TYPE,DIM,SIZEs[si],LAMs2[la],se), delimiter=",")
             res[la,se] = np.min(tmp[:,-3])
         optla = LAMs2[np.argmin(np.mean(res[la,:]))]
         LC = np.zeros((500,4,20))
         for se in range(SEED):
-            tmp = np.loadtxt("./Results/%s/%s/dim-%d/size-%d/lam-%.10f/1-seed-%d.csv"%(METHs[me],TYPE,DIM,SIZEs[si],optla,se), delimiter=",")
+            tmp = np.loadtxt("./Results/%s/%s/dim-%d/size-%d/lam-%.10f/seed-%d.csv"%(METHs[me],TYPE,DIM,SIZEs[si],optla,se), delimiter=",")
             LC[:,0,se] = tmp[:,3]
             LC[:,1,se] = tmp[:,-3]
             LC[:,2,se] = tmp[:,1]
@@ -83,9 +83,9 @@ def func(TYPEs,METHs,METHs2,DIMs):
         plt.savefig("./Figures/figure5/%s_%s_dim-%d_size-%d_miscla.png"%(METHs2[me],TYPE,DIM,SIZEs[si]), bbox_inches="tight", pad_inches=.02, dpi=200, facecolor=fig.get_facecolor(), edgecolor='none'); plt.close()
 #
 TYPEs = ["non-additive-sq2"]
-METHs = ["NGLasso1-0.0000000000/relu-4"   ,"NGLasso1-0.2500000000/relu-4"   ,"NGLasso1-0.5000000000/relu-4"   ,"NGLasso1-0.7500000000/relu-4"   ,"NGLasso1-1.0000000000/relu-4",
-         "NBridge1-0.1250000000/relu-4-10","NBridge1-0.2500000000/relu-4-10","NBridge1-0.5000000000/relu-4-10","NBridge1-1.0000000000/relu-4-10","NBridge1-2.0000000000/relu-4-10"]
-METHs2= ["NGLasso1-0.0000000000"   ,"NGLasso1-0.2500000000"   ,"NGLasso1-0.5000000000"   ,"NGLasso1-0.7500000000"   ,"NGLasso1-1.0000000000",
-         "NBridge1-0.1250000000-10","NBridge1-0.2500000000-10","NBridge1-0.5000000000-10","NBridge1-1.0000000000-10","NBridge1-2.0000000000-10"]
+METHs = ["NGLasso-0.0000000000/relu-4"   ,"NGLasso-0.2500000000/relu-4"   ,"NGLasso-0.5000000000/relu-4"   ,"NGLasso-0.7500000000/relu-4"   ,"NGLasso-1.0000000000/relu-4",
+         "NBridge-0.1250000000/relu-4-10","NBridge-0.2500000000/relu-4-10","NBridge-0.5000000000/relu-4-10","NBridge-1.0000000000/relu-4-10","NBridge-2.0000000000/relu-4-10"]
+METHs2= ["NGLasso-0.0000000000"   ,"NGLasso-0.2500000000"   ,"NGLasso-0.5000000000"   ,"NGLasso-0.7500000000"   ,"NGLasso-1.0000000000",
+         "NBridge-0.1250000000-10","NBridge-0.2500000000-10","NBridge-0.5000000000-10","NBridge-1.0000000000-10","NBridge-2.0000000000-10"]
 DIMs   = [10]#5,20
 func(TYPEs,METHs,METHs2,DIMs)

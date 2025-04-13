@@ -15,33 +15,23 @@ def func(TYPEs,METHs,DIMs):
             tmp1 = np.zeros((len(METHs),len(LAMs2))); tmp2 = np.zeros((len(METHs),len(LAMs2)))
             for me in range(len(METHs)):
                 for la in range(len(LAMs2)):
-                    tmp = np.loadtxt("./Results/%s/%s/dim-%d/size-%d/lam-%.10f/1-seed-%d.csv"%(METHs[me],TYPE,DIM,SIZEs[si],LAMs2[la],se), delimiter=",")
+                    tmp = np.loadtxt("./Results/%s/%s/dim-%d/size-%d/lam-%.10f/seed-%d.csv"%(METHs[me],TYPE,DIM,SIZEs[si],LAMs2[la],se), delimiter=",")
                     tmp1[me,la] = np.min(tmp[:,-4])
                     tmp2[me,la] = np.min(tmp[:,-3])
             idx = np.unravel_index(np.argmin(tmp1), tmp1.shape)
-            tmp = np.loadtxt("./Results/%s/%s/dim-%d/size-%d/lam-%.10f/1-seed-%d.csv"%(METHs[idx[0]],TYPE,DIM,SIZEs[si],LAMs2[idx[1]],se), delimiter=",")
+            tmp = np.loadtxt("./Results/%s/%s/dim-%d/size-%d/lam-%.10f/seed-%d.csv"%(METHs[idx[0]],TYPE,DIM,SIZEs[si],LAMs2[idx[1]],se), delimiter=",")
             if np.array_equal(np.array([0,1,2]),np.sort(np.argsort(tmp[np.argmin(tmp[:,-4]),4:-4])[::-1][:3]))==False:
                 res1 += 1
             idx = np.unravel_index(np.argmin(tmp2), tmp2.shape)
-            tmp = np.loadtxt("./Results/%s/%s/dim-%d/size-%d/lam-%.10f/1-seed-%d.csv"%(METHs[idx[0]],TYPE,DIM,SIZEs[si],LAMs2[idx[1]],se), delimiter=",")
+            tmp = np.loadtxt("./Results/%s/%s/dim-%d/size-%d/lam-%.10f/seed-%d.csv"%(METHs[idx[0]],TYPE,DIM,SIZEs[si],LAMs2[idx[1]],se), delimiter=",")
             if np.array_equal(np.array([0,1,2]),np.sort(np.argsort(tmp[np.argmin(tmp[:,-3]),4:-4])[::-1][:3]))==False:
                 res2 += 1
         print(METHs[0],DIM,SIZEs[si],res1,res2)
 #
-TYPEs = ["non-additive-sq2"]#["linear","additive-sq","non-additive-sq1","non-additive-sq2","non-additive-sq3","additive-sin","non-additive-sin1","non-additive-sin2","non-additive-sin3"]
+TYPEs = ["non-additive-sq2"]
 DIMs   = [10]
-func(TYPEs,["NGLasso1-0.0000000000/relu-4"   ,"NGLasso1-0.2500000000/relu-4"   ,"NGLasso1-0.5000000000/relu-4"   ,"NGLasso1-0.7500000000/relu-4"   ,"NGLasso1-1.0000000000/relu-4"   ],DIMs)
-func(TYPEs,["NBridge1-0.1250000000/relu-4-10","NBridge1-0.2500000000/relu-4-10","NBridge1-0.5000000000/relu-4-10","NBridge1-1.0000000000/relu-4-10","NBridge1-2.0000000000/relu-4-10"],DIMs)
-"""
-func(TYPEs,["NBridge1-0.1250000000/relu-4-5" ,"NBridge1-0.2500000000/relu-4-5" ,"NBridge1-0.5000000000/relu-4-5" ,"NBridge1-1.0000000000/relu-4-5" ,"NBridge1-2.0000000000/relu-4-5" ],DIMs)
-func(TYPEs,["NBridge1-0.1250000000/relu-4-20","NBridge1-0.2500000000/relu-4-20","NBridge1-0.5000000000/relu-4-20","NBridge1-1.0000000000/relu-4-20","NBridge1-2.0000000000/relu-4-20"],DIMs)
-#
-TYPEs = ["non-additive-sq2"]#["linear","additive-sq","non-additive-sq1","non-additive-sq2","non-additive-sq3","additive-sin","non-additive-sin1","non-additive-sin2","non-additive-sin3"]
-func(TYPEs,["NGLasso1-0.0000000000/relu-4"   ,"NGLasso1-0.2500000000/relu-4"   ,"NGLasso1-0.5000000000/relu-4"   ,"NGLasso1-0.7500000000/relu-4"   ,"NGLasso1-1.0000000000/relu-4"   ],DIMs)
-func(TYPEs,["NBridge1-0.1250000000/relu-4-10","NBridge1-0.2500000000/relu-4-10","NBridge1-0.5000000000/relu-4-10","NBridge1-1.0000000000/relu-4-10","NBridge1-2.0000000000/relu-4-10"],DIMs)
-DIMs  = [5,20]
-func(TYPEs,METHs,DIMs)
-"""
+func(TYPEs,["NGLasso-0.0000000000/relu-4"   ,"NGLasso-0.2500000000/relu-4"   ,"NGLasso-0.5000000000/relu-4"   ,"NGLasso-0.7500000000/relu-4"   ,"NGLasso-1.0000000000/relu-4"   ],DIMs)
+func(TYPEs,["NBridge-0.1250000000/relu-4-10","NBridge-0.2500000000/relu-4-10","NBridge-0.5000000000/relu-4-10","NBridge-1.0000000000/relu-4-10","NBridge-2.0000000000/relu-4-10"],DIMs)
 
 print(2)
 def func(TYPEs,METHs,DIMs):
@@ -51,43 +41,27 @@ def func(TYPEs,METHs,DIMs):
             for se in range(SEED):
                 tmp1 = np.zeros(len(LAMs2)); tmp2 = np.zeros(len(LAMs2))
                 for la in range(len(LAMs2)):
-                    tmp = np.loadtxt("./Results/%s/%s/dim-%d/size-%d/lam-%.10f/1-seed-%d.csv"%(METHs[me],TYPE,DIM,SIZEs[si],LAMs2[la],se), delimiter=",")
+                    tmp = np.loadtxt("./Results/%s/%s/dim-%d/size-%d/lam-%.10f/seed-%d.csv"%(METHs[me],TYPE,DIM,SIZEs[si],LAMs2[la],se), delimiter=",")
                     tmp1[la] = np.min(tmp[:,-4])
                     tmp2[la] = np.min(tmp[:,-3])
-                tmp = np.loadtxt("./Results/%s/%s/dim-%d/size-%d/lam-%.10f/1-seed-%d.csv"%(METHs[me],TYPE,DIM,SIZEs[si],LAMs2[np.argmin(tmp1)],se), delimiter=",")
+                tmp = np.loadtxt("./Results/%s/%s/dim-%d/size-%d/lam-%.10f/seed-%d.csv"%(METHs[me],TYPE,DIM,SIZEs[si],LAMs2[np.argmin(tmp1)],se), delimiter=",")
                 if np.array_equal(np.array([0,1,2]),np.sort(np.argsort(tmp[np.argmin(tmp[:,-4]),4:-4])[::-1][:3]))==False:
                     res1 += 1
-                tmp = np.loadtxt("./Results/%s/%s/dim-%d/size-%d/lam-%.10f/1-seed-%d.csv"%(METHs[me],TYPE,DIM,SIZEs[si],LAMs2[np.argmin(tmp2)],se), delimiter=",")
+                tmp = np.loadtxt("./Results/%s/%s/dim-%d/size-%d/lam-%.10f/seed-%d.csv"%(METHs[me],TYPE,DIM,SIZEs[si],LAMs2[np.argmin(tmp2)],se), delimiter=",")
                 if np.array_equal(np.array([0,1,2]),np.sort(np.argsort(tmp[np.argmin(tmp[:,-3]),4:-4])[::-1][:3]))==False:
                     res2 += 1
             print(METHs[me],DIM,SIZEs[si],res1,res2)
         if METHs[me]=="RandomForest":
             res = 0
             for se in range(SEED):
-                tmp = np.loadtxt("./Results/%s/%s/dim-%d/size-%d/1-seed-%d.csv"%(METHs[me],TYPE,DIM,SIZEs[si],se), delimiter=",")
+                tmp = np.loadtxt("./Results/%s/%s/dim-%d/size-%d/seed-%d.csv"%(METHs[me],TYPE,DIM,SIZEs[si],se), delimiter=",")
                 if np.array_equal(np.array([0,1,2]),np.sort(np.argsort(tmp[2:-4])[::-1][:3]))==False:
                     res += 1
             print(METHs[me],DIM,SIZEs[si],res)
 #
-TYPEs = ["non-additive-sq2"]#["linear","additive-sq","non-additive-sq1","non-additive-sq2","non-additive-sq3","additive-sin","non-additive-sin1","non-additive-sin2","non-additive-sin3"]
-METHs = ["NGLasso1-0.0000000000/relu-4"   ,"NGLasso1-0.2500000000/relu-4"   ,"NGLasso1-0.5000000000/relu-4"   ,"NGLasso1-0.7500000000/relu-4"   ,"NGLasso1-1.0000000000/relu-4",
-         "NBridge1-0.1250000000/relu-4-10","NBridge1-0.2500000000/relu-4-10","NBridge1-0.5000000000/relu-4-10","NBridge1-1.0000000000/relu-4-10","NBridge1-2.0000000000/relu-4-10",
+TYPEs = ["non-additive-sq2"]
+METHs = ["NGLasso-0.0000000000/relu-4"   ,"NGLasso-0.2500000000/relu-4"   ,"NGLasso-0.5000000000/relu-4"   ,"NGLasso-0.7500000000/relu-4"   ,"NGLasso-1.0000000000/relu-4",
+         "NBridge-0.1250000000/relu-4-10","NBridge-0.2500000000/relu-4-10","NBridge-0.5000000000/relu-4-10","NBridge-1.0000000000/relu-4-10","NBridge-2.0000000000/relu-4-10",
          "RandomForest"]
-"""
-METHs = ["NGLasso1-0.0000000000/relu-4"   ,"NGLasso1-0.2500000000/relu-4"   ,"NGLasso1-0.5000000000/relu-4"   ,"NGLasso1-0.7500000000/relu-4"   ,"NGLasso1-1.0000000000/relu-4",
-         "NBridge1-0.1250000000/relu-4-10","NBridge1-0.2500000000/relu-4-10","NBridge1-0.5000000000/relu-4-10","NBridge1-1.0000000000/relu-4-10","NBridge1-2.0000000000/relu-4-10",
-         "NBridge1-0.1250000000/relu-4-5" ,"NBridge1-0.2500000000/relu-4-5" ,"NBridge1-0.5000000000/relu-4-5" ,"NBridge1-1.0000000000/relu-4-5" ,"NBridge1-2.0000000000/relu-4-5" ,
-         "NBridge1-0.1250000000/relu-4-20","NBridge1-0.2500000000/relu-4-20","NBridge1-0.5000000000/relu-4-20","NBridge1-1.0000000000/relu-4-20","NBridge1-2.0000000000/relu-4-20",
-         "RandomForest"]
-"""
 DIMs   = [10]
 func(TYPEs,METHs,DIMs)
-#
-"""
-TYPEs = ["non-additive-sq2"]#["linear","additive-sq","non-additive-sq1","non-additive-sq2","non-additive-sq3","additive-sin","non-additive-sin1","non-additive-sin2","non-additive-sin3"]
-METHs = ["NGLasso1-0.0000000000/relu-4"   ,"NGLasso1-0.2500000000/relu-4"   ,"NGLasso1-0.5000000000/relu-4"   ,"NGLasso1-0.7500000000/relu-4"   ,"NGLasso1-1.0000000000/relu-4",
-         "NBridge1-0.1250000000/relu-4-10","NBridge1-0.2500000000/relu-4-10","NBridge1-0.5000000000/relu-4-10","NBridge1-1.0000000000/relu-4-10","NBridge1-2.0000000000/relu-4-10",
-         "RandomForest"]
-DIMs  = [5,20]
-func(TYPEs,METHs,DIMs)
-"""

@@ -31,10 +31,10 @@ def task(T):
         os.system("python NBridge.py --type %s --dim %d --size %d --alp %f --lam %s --Mnum 5 --act %s --lay %d --seed %d --cuda %d"%(TYPE,DIM,SIZE,ALP,LAM,ACT,LAY,SEED,CUDA))
         os.system("python NBridge.py --type %s --dim %d --size %d --alp %f --lam %s --Mnum 20 --act %s --lay %d --seed %d --cuda %d"%(TYPE,DIM,SIZE,ALP,LAM,ACT,LAY,SEED,CUDA))
     #"""
-    #"""(NNSGLasso weight-decay)
+    """(NNSGLasso weight-decay)
     for TYPE,DIM,SIZE,ALP,LAM1,SEED,LAM2 in itertools.product(TYPEs,[10],SIZEs,[0.0,.25,0.5,0.75,1.0],[10.**(i/4.-5.) for i in [T]],[10.**i for i in [-5,-4,-3,-2,-1,0,1]]):
         #os.system("python NGLasso2.py --type %s --dim %d --size %d --alp %f --lam1 %s --lam2 %s --act %s --lay %d --seed %d --cuda %d"%(TYPE,DIM,SIZE,ALP,LAM1,LAM2,ACT,LAY,SEED,CUDA))
-    #"""
+    """
 
 if __name__ == '__main__':
     #"""(RandomForest)
