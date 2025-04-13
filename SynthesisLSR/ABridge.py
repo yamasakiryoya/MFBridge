@@ -40,10 +40,10 @@ torch.manual_seed(SEED)
 if args.cuda >= 0: device = torch.device("cuda:%d" % args.cuda)
 else: device = torch.device("cpu")
 
-folder = "./Results/ABridge1-%.10f/%s-%d-%d/%s/dim-%d/size-%d/lam-%.10f"%(ALP,ACT,LAY,M,TYPE,DIM,SIZE,LAM)
+folder = "./Results/ABridge-%.10f/%s-%d-%d/%s/dim-%d/size-%d/lam-%.10f"%(ALP,ACT,LAY,M,TYPE,DIM,SIZE,LAM)
 if os.path.isdir("%s/"%folder)==False: os.makedirs("%s/"%folder)
 print("%s/seed-%d.csv"%(folder,SEED))
-if os.path.isfile("%s/1-seed-%d.csv"%(folder,SEED))==False:
+if os.path.isfile("%s/seed-%d.csv"%(folder,SEED))==False:
     #dataset
     XYful = np.zeros((SIZE+10100,DIM+1))
     for i in range(SIZE+10100):
@@ -149,10 +149,10 @@ if os.path.isfile("%s/1-seed-%d.csv"%(folder,SEED))==False:
         result[epoch, -2] = test(val_loader)
         if result[epoch,-2]<best_loss:
             best_epoch, best_loss = epoch, result[epoch,-2]
-            torch.save(model.state_dict(), "%s/1-seed-%d.pt"%(folder,SEED))
+            torch.save(model.state_dict(), "%s/seed-%d.pt"%(folder,SEED))
         scheduler.step()
-    model.load_state_dict(torch.load("%s/1-seed-%d.pt"%(folder,SEED), weights_only=True))
+    model.load_state_dict(torch.load("%s/seed-%d.pt"%(folder,SEED), weights_only=True))
     result[best_epoch,-1] = test(tes_loader)
     print('tes_loss : ', result[best_epoch,-1], "@", best_epoch)
-    os.remove("%s/1-seed-%d.pt"%(folder,SEED))
-    np.savetxt("%s/1-seed-%d.csv"%(folder,SEED), result, delimiter=",")
+    os.remove("%s/seed-%d.pt"%(folder,SEED))
+    np.savetxt("%s/seed-%d.csv"%(folder,SEED), result, delimiter=",")

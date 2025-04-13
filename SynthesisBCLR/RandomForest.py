@@ -35,7 +35,7 @@ else: device = torch.device("cpu")
 folder = "./Results/RandomForest/%s/dim-%d/size-%d"%(TYPE,DIM,SIZE)
 if os.path.isdir("%s/"%folder)==False: os.makedirs("%s/"%folder)
 print("%s/seed-%d.csv"%(folder,SEED))
-if os.path.isfile("%s/1-seed-%d.csv"%(folder,SEED))==False:
+if os.path.isfile("%s/seed-%d.csv"%(folder,SEED))==False:
     #dataset
     XYful = np.zeros((SIZE+10100,DIM+1))
     for i in range(SIZE+10100):
@@ -86,4 +86,4 @@ if os.path.isfile("%s/1-seed-%d.csv"%(folder,SEED))==False:
     result[-2]   = np.mean([tmp1[i,int(Ytes[i])] for i in range(len(Ytes))])
     result[-1]   = 1.-np.count_nonzero(np.equal(tmp2,np.array(Ytes, dtype=np.float32)))/len(Ytes)
     print('result : ', result)
-    np.savetxt("%s/1-seed-%d.csv"%(folder,SEED), result.reshape(1,-1), delimiter=",")
+    np.savetxt("%s/seed-%d.csv"%(folder,SEED), result.reshape(1,-1), delimiter=",")

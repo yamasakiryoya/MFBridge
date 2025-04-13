@@ -15,14 +15,15 @@ from torch.utils.data import TensorDataset, DataLoader
 #lam, seed, device
 parser = argparse.ArgumentParser()
 parser.add_argument('--type', type=str)
-parser.add_argument('--dim',  type=int,   default=3)
-parser.add_argument('--size', type=int,   default=100)
+parser.add_argument('--dim',  type=int, default=3)
+parser.add_argument('--size', type=int, default=100)
 parser.add_argument('--alp',  type=str)
 parser.add_argument('--lam',  type=str)
+parser.add_argument('--Mnum', type=int, default=1)
 parser.add_argument('--act',  type=str)
-parser.add_argument('--lay',  type=int,   default=2)
-parser.add_argument('--seed', type=int,   default=0)
-parser.add_argument('--cuda', type=int,   default=-1)
+parser.add_argument('--lay',  type=int, default=2)
+parser.add_argument('--seed', type=int, default=0)
+parser.add_argument('--cuda', type=int, default=-1)
 args = parser.parse_args()
 #
 TYPE = args.type
@@ -30,6 +31,7 @@ DIM  = args.dim
 SIZE = args.size
 ALP  = float(args.alp)
 LAM  = float(args.lam)
+M    = args.Mnum
 ACT  = args.act
 LAY  = args.lay
 SEED = args.seed
@@ -38,10 +40,10 @@ torch.manual_seed(SEED)
 if args.cuda >= 0: device = torch.device("cuda:%d" % args.cuda)
 else: device = torch.device("cpu")
 
-folder = "./Results/NGLasso1-%.10f/%s-%d/%s/dim-%d/size-%d/lam-%.10f"%(ALP,ACT,LAY,TYPE,DIM,SIZE,LAM)
+folder = "./Results/NBridge-%.10f/%s-%d-%d/%s/dim-%d/size-%d/lam-%.10f"%(ALP,ACT,LAY,M,TYPE,DIM,SIZE,LAM)
 if os.path.isdir("%s/"%folder)==False: os.makedirs("%s/"%folder)
 print("%s/seed-%d.csv"%(folder,SEED))
-if os.path.isfile("%s/1-seed-%d.csv"%(folder,SEED))==False:
+if os.path.isfile("%s/seed-%d.csv"%(folder,SEED))==False:
     #dataset
     XYful = np.zeros((SIZE+10100,DIM+1))
     for i in range(SIZE+10100):
@@ -92,9 +94,15 @@ if os.path.isfile("%s/1-seed-%d.csv"%(folder,SEED))==False:
             loss = F.mse_loss(Y1, FX1)#/2.
             #
             score = torch.zeros(DIM).to(device)
+            Mlist = rd.randint(SIZE, size=M).tolist()
             for j in range(DIM):
-                score[j] = (1.-ALP)*torch.norm(torch.flatten(model.fc1.weight[:,j]), p=1)+ALP*torch.norm(torch.flatten(model.fc1.weight[:,j]), p=2)
-            pena = torch.sum(score)
+                for i in range(Y1.shape[0]):
+                    X12 = X1[i,:].repeat(M,1)
+                    X12[:,j] = Xtra[Mlist,j]
+                    FX12 = model(X12)
+                    score[j] += torch.mean(torch.square(FX12-FX1[i,:]))
+            score = torch.sqrt(score/2./Y1.shape[0]+.1**8)
+            pena = torch.sum(torch.pow(score, ALP))
             #
             obj = loss + LAM*pena
             obj.backward()
@@ -131,10 +139,10 @@ if os.path.isfile("%s/1-seed-%d.csv"%(folder,SEED))==False:
         result[epoch, -2] = test(val_loader)
         if result[epoch,-2]<best_loss:
             best_epoch, best_loss = epoch, result[epoch,-2]
-            torch.save(model.state_dict(), "%s/1-seed-%d.pt"%(folder,SEED))
+            torch.save(model.state_dict(), "%s/seed-%d.pt"%(folder,SEED))
         scheduler.step()
-    model.load_state_dict(torch.load("%s/1-seed-%d.pt"%(folder,SEED), weights_only=True))
+    model.load_state_dict(torch.load("%s/seed-%d.pt"%(folder,SEED), weights_only=True))
     result[best_epoch,-1] = test(tes_loader)
     print('tes_loss : ', result[best_epoch,-1], "@", best_epoch)
-    os.remove("%s/1-seed-%d.pt"%(folder,SEED))
-    np.savetxt("%s/1-seed-%d.csv"%(folder,SEED), result, delimiter=",")
+    os.remove("%s/seed-%d.pt"%(folder,SEED))
+    np.savetxt("%s/seed-%d.csv"%(folder,SEED), result, delimiter=",")

@@ -28,6 +28,15 @@ Or exclude them from experimental codes, bash.py, figure~.py, and table~.py, in 
 
 ## Synthesis Data Experiments
 
+In SynthesisLSR/ or SynthesisBCLR/<br>
+bash.py<br>
+figure1~5.py<br>
+table1.py
 
 
 ## Real-World Data Experiments
+
+In RealLSR/ or RealBCLR/<br>
+bash.py<br>
+figure6.py<br>
+table2.py

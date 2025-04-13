@@ -40,10 +40,10 @@ torch.manual_seed(SEED)
 if args.cuda >= 0: device = torch.device("cuda:%d" % args.cuda)
 else: device = torch.device("cpu")
 
-folder = "./Results/LBridge1-%.10f/%s-%d-%d/%s/dim-%d/size-%d/lam-%.10f"%(ALP,ACT,LAY,M,TYPE,DIM,SIZE,LAM)
+folder = "./Results/NBridge-%.10f/%s-%d-%d/%s/dim-%d/size-%d/lam-%.10f"%(ALP,ACT,LAY,M,TYPE,DIM,SIZE,LAM)
 if os.path.isdir("%s/"%folder)==False: os.makedirs("%s/"%folder)
 print("%s/seed-%d.csv"%(folder,SEED))
-if os.path.isfile("%s/1-seed-%d.csv"%(folder,SEED))==False:
+if os.path.isfile("%s/seed-%d.csv"%(folder,SEED))==False:
     #dataset
     XYful = np.zeros((SIZE+10100,DIM+1))
     for i in range(SIZE+10100):
@@ -71,9 +71,15 @@ if os.path.isfile("%s/1-seed-%d.csv"%(folder,SEED))==False:
     class RegNet(nn.Module):
         def __init__(self, d, M):
             super(RegNet, self).__init__()
-            self.fc = nn.Linear(d, 1); torch.nn.init.normal_(self.fc.weight, mean=.0, std=.1**2); torch.nn.init.normal_(self.fc.bias, mean=.0, std=.1**2)
+            if LAY>=2: self.fc1 = nn.Linear(d, M); torch.nn.init.normal_(self.fc1.weight, mean=.0, std=.1**2); torch.nn.init.normal_(self.fc1.bias, mean=.0, std=.1**2)
+            if LAY>=3: self.fc2 = nn.Linear(M, M); torch.nn.init.normal_(self.fc2.weight, mean=.0, std=.1**2); torch.nn.init.normal_(self.fc2.bias, mean=.0, std=.1**2)
+            if LAY>=4: self.fc3 = nn.Linear(M, M); torch.nn.init.normal_(self.fc3.weight, mean=.0, std=.1**2); torch.nn.init.normal_(self.fc3.bias, mean=.0, std=.1**2)
+            self.fc4 = nn.Linear(M, 1);            torch.nn.init.normal_(self.fc4.weight, mean=.0, std=.1**2); torch.nn.init.normal_(self.fc4.bias, mean=.0, std=.1**2)
         def forward(self, x):
-            x = self.fc(x)
+            if LAY>=2: x = eval("torch."+ACT)(self.fc1(x))
+            if LAY>=3: x = eval("torch."+ACT)(self.fc2(x))
+            if LAY>=4: x = eval("torch."+ACT)(self.fc3(x))
+            x = self.fc4(x)
             return x
 
     def train(tra_loader):
@@ -87,7 +93,15 @@ if os.path.isfile("%s/1-seed-%d.csv"%(folder,SEED))==False:
             FX1 = model(X1)
             loss = -torch.mean(F.logsigmoid(FX1)*Y1+F.logsigmoid(-FX1)*(1-Y1))
             #
-            score = torch.sqrt(torch.square(torch.flatten(model.fc.weight))+.1**8)
+            score = torch.zeros(DIM).to(device)
+            Mlist = rd.randint(SIZE, size=M).tolist()
+            for j in range(DIM):
+                for i in range(Y1.shape[0]):
+                    X12 = X1[i,:].repeat(M,1)
+                    X12[:,j] = Xtra[Mlist,j]
+                    FX12 = model(X12)
+                    score[j] += torch.mean(torch.square(FX12-FX1[i,:]))
+            score = torch.sqrt(score/2./Y1.shape[0]+.1**8)
             pena = torch.sum(torch.pow(score, ALP))
             #
             obj = loss + LAM*pena
@@ -119,7 +133,7 @@ if os.path.isfile("%s/1-seed-%d.csv"%(folder,SEED))==False:
     #learning
     EPOCH = 500
     model = RegNet(DIM, 100).to(device)
-    optimizer = optim.Adam(model.parameters(), lr=.1**1.)
+    optimizer = optim.Adam(model.parameters(), lr=.1**3.)
     scheduler = optim.lr_scheduler.ExponentialLR(optimizer, gamma=.1**(1./EPOCH))
     best_epoch1, best_loss1, best_epoch2, best_loss2, result = 0, 10.**8, 0, 10.**8, np.zeros((EPOCH, 8+DIM))
     for epoch in range(EPOCH):
@@ -127,17 +141,17 @@ if os.path.isfile("%s/1-seed-%d.csv"%(folder,SEED))==False:
         result[epoch,-4:-2] = test(val_loader)
         if result[epoch,-4]<best_loss1:
             best_epoch1, best_loss1 = epoch, result[epoch,-4]
-            torch.save(model.state_dict(), "%s/1-seed-1-%d.pt"%(folder,SEED))
+            torch.save(model.state_dict(), "%s/seed-1-%d.pt"%(folder,SEED))
         if result[epoch,-3]<best_loss2:
             best_epoch2, best_loss2 = epoch, result[epoch,-3]
-            torch.save(model.state_dict(), "%s/1-seed-2-%d.pt"%(folder,SEED))
+            torch.save(model.state_dict(), "%s/seed-2-%d.pt"%(folder,SEED))
         scheduler.step()
-    model.load_state_dict(torch.load("%s/1-seed-1-%d.pt"%(folder,SEED), weights_only=True))
+    model.load_state_dict(torch.load("%s/seed-1-%d.pt"%(folder,SEED), weights_only=True))
     result[best_epoch1,-2:] = test(tes_loader)
     print('tes_loss : ', result[best_epoch1,-2:], "@", best_epoch1)
-    os.remove("%s/1-seed-1-%d.pt"%(folder,SEED))
-    model.load_state_dict(torch.load("%s/1-seed-2-%d.pt"%(folder,SEED), weights_only=True))
+    os.remove("%s/seed-1-%d.pt"%(folder,SEED))
+    model.load_state_dict(torch.load("%s/seed-2-%d.pt"%(folder,SEED), weights_only=True))
     result[best_epoch2,-2:] = test(tes_loader)
     print('tes_loss : ', result[best_epoch2,-2:], "@", best_epoch2)
-    os.remove("%s/1-seed-2-%d.pt"%(folder,SEED))
-    np.savetxt("%s/1-seed-%d.csv"%(folder,SEED), result, delimiter=",")
+    os.remove("%s/seed-2-%d.pt"%(folder,SEED))
+    np.savetxt("%s/seed-%d.csv"%(folder,SEED), result, delimiter=",")
