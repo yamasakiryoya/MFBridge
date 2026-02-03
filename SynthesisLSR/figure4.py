@@ -91,6 +91,6 @@ def func(TYPEs,DIMs):
         plt.xticks(np.arange(DIM),np.arange(1,DIM+1)); plt.xlabel(r'$j$'); plt.ylabel(r'$s_j/\max(s_k)$, $n=%d$'%SIZEs[si]); plt.tight_layout()#test risk#
         plt.savefig("./Figures/figure4/%s_dim-%d_size-%d_Rloss.png"%(TYPE,DIM,SIZEs[si]), bbox_inches="tight", pad_inches=.02, dpi=200, facecolor=fig.get_facecolor(), edgecolor='none'); plt.close()
 #
-TYPEs = ["non-additive-sq2"]
+TYPEs = ["non-additive-sq"]
 DIMs   = [10]#5,20
 func(TYPEs,DIMs)

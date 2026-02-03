@@ -110,13 +110,13 @@ def func(TYPEs,METHs,DIMs):
         plt.xticks(range(len(SIZEs)),SIZEs); plt.xlabel(r'$n$'); plt.ylabel(r'log(test MSE)'); plt.tight_layout()
         plt.savefig("./Figures/figure1/%s_dim-%d_Rloss.png"%(TYPE,DIM), bbox_inches="tight", pad_inches=.02, dpi=200, facecolor=fig.get_facecolor(), edgecolor='none'); plt.close()
 #
-TYPEs = ["non-additive-sq2"]
+TYPEs = ["non-additive-sq"]
 METHs = ["NBridge-0.1250000000/relu-4-10","NBridge-0.2500000000/relu-4-10","NBridge-0.5000000000/relu-4-10","NBridge-1.0000000000/relu-4-10","NBridge-2.0000000000/relu-4-10",
          "NGLasso-0.0000000000/relu-4"   ,"NGLasso-0.2500000000/relu-4"   ,"NGLasso-0.5000000000/relu-4"   ,"NGLasso-0.7500000000/relu-4"   ,"NGLasso-1.0000000000/relu-4"   ]
 DIMs   = [10]
 func(TYPEs,METHs,DIMs)
 #
-TYPEs = ["non-additive-sq2"]
+TYPEs = ["non-additive-sq"]
 METHs = ["NBridge-0.1250000000/relu-4-10","NBridge-0.2500000000/relu-4-10","NBridge-0.5000000000/relu-4-10","NBridge-1.0000000000/relu-4-10","NBridge-2.0000000000/relu-4-10",
          "NGLasso-0.0000000000/relu-4"   ,"NGLasso-0.2500000000/relu-4"   ,"NGLasso-0.5000000000/relu-4"   ,"NGLasso-0.7500000000/relu-4"   ,"NGLasso-1.0000000000/relu-4"   ]
 DIMs  = [5,20]

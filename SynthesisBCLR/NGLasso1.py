@@ -48,20 +48,7 @@ if os.path.isfile("%s/1-seed-%d.csv"%(folder,SEED))==False:
     XYful = np.zeros((SIZE+10100,DIM+1))
     for i in range(SIZE+10100):
         for j in range(DIM): XYful[i,j]=rd.normal(0,1)
-        if TYPE=="non-additive-sq1":  XYful[i,-1] = 1 if rd.rand()<1./(1.+np.exp(-(np.square(XYful[i,0]+2.*XYful[i,1]+3.*XYful[i,2])-6.))) else 0
-        elif TYPE=="non-additive-sq2":  XYful[i,-1] = 1 if rd.rand()<1./(1.+np.exp(-(np.square(XYful[i,0]+2.*XYful[i,1]+3.*XYful[i,2])-5.))) else 0
-        # if   TYPE=="linear":            XYful[i,-1] = 1 if rd.rand()<1./(1.+np.exp(-(XYful[i,0]+2.*XYful[i,1]+3.*XYful[i,2]))) else 0
-        # elif TYPE=="additive-sq":       XYful[i,-1] = 1 if rd.rand()<1./(1.+np.exp(-(np.square(XYful[i,0])+np.square(2.*XYful[i,1])+np.square(3.*XYful[i,2])-10.))) else 0
-        # elif TYPE=="non-additive-sq1":  XYful[i,-1] = 1 if rd.rand()<1./(1.+np.exp(-(np.square(XYful[i,0]+2.*XYful[i,1]+3.*XYful[i,2])-4.))) else 0
-        # elif TYPE=="non-additive-sq2":  XYful[i,-1] = 1 if rd.rand()<1./(1.+np.exp(-(np.square(XYful[i,0]+2.*XYful[i,1])+np.square(3.*XYful[i,2])-10.))) else 0
-        # elif TYPE=="non-additive-sq3":  XYful[i,-1] = 1 if rd.rand()<1./(1.+np.exp(-(np.square(XYful[i,0])+np.square(2.*XYful[i,1]+3.*XYful[i,2])-7.))) else 0
-        # elif TYPE=="non-additive-sq4":  XYful[i,-1] = 1 if rd.rand()<1./(1.+np.exp(-(np.square(XYful[i,0]+2.*XYful[i,1]+3.*XYful[i,2])-6.))) else 0
-        # elif TYPE=="additive-sin":      XYful[i,-1] = 1 if rd.rand()<1./(1.+np.exp(-10.*(np.sin(XYful[i,0])+np.sin(2.*XYful[i,1])+np.sin(3.*XYful[i,2])))) else 0
-        # elif TYPE=="non-additive-sin1": XYful[i,-1] = 1 if rd.rand()<1./(1.+np.exp(-10.*(np.sin(XYful[i,0]+2.*XYful[i,1]+3.*XYful[i,2])))) else 0
-        # elif TYPE=="non-additive-sin2": XYful[i,-1] = 1 if rd.rand()<1./(1.+np.exp(-10.*(np.sin(XYful[i,0]+2.*XYful[i,1])+np.sin(3.*XYful[i,2])))) else 0
-        # elif TYPE=="non-additive-sin3": XYful[i,-1] = 1 if rd.rand()<1./(1.+np.exp(-10.*(np.sin(XYful[i,0])+np.sin(2.*XYful[i,1]+3.*XYful[i,2])))) else 0
-        # elif TYPE=="non-additive-sin4": XYful[i,-1] = 1 if rd.rand()<1./(1.+np.exp(-(np.sin(XYful[i,0]+2.*XYful[i,1]+3.*XYful[i,2])))) else 0
-    #print(np.sum(XYful[:,-1])/len(XYful[:,-1]))
+        if TYPE=="non-additive-sq":  XYful[i,-1] = 1 if rd.rand()<1./(1.+np.exp(-(np.square(XYful[i,0]+2.*XYful[i,1]+3.*XYful[i,2])-5.))) else 0
     XYful = rd.permutation(XYful)
     XYtra, XYres = train_test_split(XYful, train_size=SIZE, random_state=SEED) #train SIZE
     XYval, XYtes = train_test_split(XYres, train_size=100,  random_state=SEED) #valid 100, test rest

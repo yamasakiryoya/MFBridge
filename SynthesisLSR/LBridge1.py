@@ -50,8 +50,7 @@ if os.path.isfile("%s/1-seed-%d.csv"%(folder,SEED))==False:
     XYful = np.zeros((SIZE+10100,DIM+1))
     for i in range(SIZE+10100):
         for j in range(DIM): XYful[i,j]  = rd.normal(0,1)
-        if TYPE=="non-additive-sq1":  XYful[i,-1] = np.square(XYful[i,0]+2.*XYful[i,1]+3.*XYful[i,2])+rd.normal(0,1)
-        elif TYPE=="non-additive-sq2":  XYful[i,-1] = np.square(XYful[i,0]+2.*XYful[i,1]+3.*XYful[i,2])/5+rd.normal(0,1)
+        if TYPE=="non-additive-sq":  XYful[i,-1] = np.square(XYful[i,0]+2.*XYful[i,1]+3.*XYful[i,2])/5+rd.normal(0,1)
     XYful = rd.permutation(XYful)
     XYres, XYtes = train_test_split(XYful, test_size=10000, random_state=SEED) #test 10000
     XYtra, XYval = train_test_split(XYres, train_size=SIZE, random_state=SEED) #train SIZE, valid 100
@@ -112,7 +111,7 @@ if os.path.isfile("%s/1-seed-%d.csv"%(folder,SEED))==False:
     #learning
     EPOCH = 2000
     model = RegNet(DIM, 100).to(device)
-    optimizer = optim.Adam(model.parameters(), lr=.1**3)
+    optimizer = optim.Adam(model.parameters(), lr=.1**1)
     scheduler = optim.lr_scheduler.ExponentialLR(optimizer, gamma=.1**(1./EPOCH))
     best_epoch, best_loss, result = 0, 10.**8, np.zeros((EPOCH, 5+DIM))
     for epoch in range(EPOCH):

@@ -124,7 +124,7 @@ def func(TYPEs,METHs,DIMs):
         plt.ylim([BOT,TOP]); plt.xticks([i*4 for i in range(7)],[-5,-4,-3,-2,-1,0,1]); plt.xlabel(r'$\log_{10}(\lambda)$'); plt.ylabel(r'test MCR, $n=%d$'%SIZEs[si]); plt.tight_layout()
         plt.savefig("./Figures/figure2/MFBridge_%s_dim-%d_size-%d_miscla.png"%(TYPE,DIM,SIZEs[si]), bbox_inches="tight", pad_inches=.02, dpi=200, facecolor=fig.get_facecolor(), edgecolor='none'); plt.close()
 #
-TYPEs = ["non-additive-sq2"]
+TYPEs = ["non-additive-sq"]
 METHs = ["NBridge-0.1250000000/relu-4-10","NBridge-0.2500000000/relu-4-10","NBridge-0.5000000000/relu-4-10","NBridge-1.0000000000/relu-4-10","NBridge-2.0000000000/relu-4-10"]
 DIMs   = [10]#5,20
 func(TYPEs,METHs,DIMs)
@@ -237,7 +237,7 @@ def func(TYPEs,METHs,DIMs):
         plt.ylim([BOT,TOP]); plt.xticks([i*4 for i in range(7)],[-5,-4,-3,-2,-1,0,1]); plt.xlabel(r'$\log_{10}(\lambda)$'); plt.ylabel(r'test MCR, $n=%d$'%SIZEs[si]); plt.tight_layout()
         plt.savefig("./Figures/figure2/NNSGLasso_%s_dim-%d_size-%d_miscla.png"%(TYPE,DIM,SIZEs[si]), bbox_inches="tight", pad_inches=.02, dpi=200, facecolor=fig.get_facecolor(), edgecolor='none'); plt.close()
 #
-TYPEs = ["non-additive-sq2"]
+TYPEs = ["non-additive-sq"]
 METHs = ["NGLasso-0.0000000000/relu-4"   ,"NGLasso-0.2500000000/relu-4"   ,"NGLasso-0.5000000000/relu-4"   ,"NGLasso-0.7500000000/relu-4"   ,"NGLasso-1.0000000000/relu-4"]
 DIMs   = [10]#5,20
 func(TYPEs,METHs,DIMs)

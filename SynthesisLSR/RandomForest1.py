@@ -42,8 +42,7 @@ if os.path.isfile("%s/1-seed-%d.csv"%(folder,SEED))==False:
     XYful = np.zeros((SIZE+10100,DIM+1))
     for i in range(SIZE+10100):
         for j in range(DIM): XYful[i,j]  = rd.normal(0,1)
-        if TYPE=="non-additive-sq1":  XYful[i,-1] = np.square(XYful[i,0]+2.*XYful[i,1]+3.*XYful[i,2])+rd.normal(0,1)
-        elif TYPE=="non-additive-sq2":  XYful[i,-1] = np.square(XYful[i,0]+2.*XYful[i,1]+3.*XYful[i,2])/5+rd.normal(0,1)
+        if TYPE=="non-additive-sq":  XYful[i,-1] = np.square(XYful[i,0]+2.*XYful[i,1]+3.*XYful[i,2])/5+rd.normal(0,1)
     XYful = rd.permutation(XYful)
     XYres, XYtes = train_test_split(XYful, test_size=10000, random_state=SEED) #test 10000
     XYtra, XYval = train_test_split(XYres, train_size=SIZE, random_state=SEED) #train SIZE, valid 100
@@ -54,9 +53,6 @@ if os.path.isfile("%s/1-seed-%d.csv"%(folder,SEED))==False:
     #learning
     model = RandomForestRegressor()
     model.fit(Xtra, Ytra)
-    #forest = GridSearchCV(RandomForestRegressor(), {'n_estimators':[2,4,8,16,32,64],'max_depth':[2,4,8,16,32,64]}, verbose=2)
-    #forest.fit(Xtra, Ytra)
-    #model = forest.best_estimator_
 
     result = np.zeros(3+DIM)
     result[0]    = np.mean(np.square(Ytra-model.predict(Xtra)))

@@ -248,7 +248,7 @@ def func(TYPEs,METHs,DIMs):
         plt.savefig("./Plots/plot6/%s_dim-%d_miscla.png"%(TYPE,DIM), bbox_inches="tight", pad_inches=.02, dpi=200, facecolor=fig.get_facecolor(), edgecolor='none'); plt.close()
 #
 #"""
-TYPEs = ["non-additive-sq2"]#"non-additive-sq1",
+TYPEs = ["non-additive-sq"]
 METHs = ["NBridge1-0.1250000000/relu-4-10","NBridge1-0.2500000000/relu-4-10","NBridge1-0.5000000000/relu-4-10","NBridge1-1.0000000000/relu-4-10","NBridge1-2.0000000000/relu-4-10",
          "NSCAD1-1.0000000000/relu-4-10","NSCAD1-2.0000000000/relu-4-10","NSCAD1-3.0000000000/relu-4-10","NSCAD1-4.0000000000/relu-4-10","NSCAD1-5.0000000000/relu-4-10",
          "NMCP1-1.0000000000/relu-4-10","NMCP1-2.0000000000/relu-4-10","NMCP1-3.0000000000/relu-4-10","NMCP1-4.0000000000/relu-4-10","NMCP1-5.0000000000/relu-4-10",

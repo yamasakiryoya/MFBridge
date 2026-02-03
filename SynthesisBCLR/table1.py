@@ -29,10 +29,10 @@ def func(TYPEs,METHs,DIMs):
                 res2 += 1
         print(METHs[0],DIM,SIZEs[si],res1,res2)
 #
-TYPEs = ["non-additive-sq2"]
+TYPEs = ["non-additive-sq"]
 DIMs   = [5,10,20]
-# func(TYPEs,["NGLasso1-0.0000000000/relu-4"   ,"NGLasso1-0.2500000000/relu-4"   ,"NGLasso1-0.5000000000/relu-4"   ,"NGLasso1-0.7500000000/relu-4"   ,"NGLasso1-1.0000000000/relu-4"   ],DIMs)
-# func(TYPEs,["NBridge1-0.1250000000/relu-4-10","NBridge1-0.2500000000/relu-4-10","NBridge1-0.5000000000/relu-4-10","NBridge1-1.0000000000/relu-4-10","NBridge1-2.0000000000/relu-4-10"],DIMs)
+func(TYPEs,["NGLasso1-0.0000000000/relu-4"   ,"NGLasso1-0.2500000000/relu-4"   ,"NGLasso1-0.5000000000/relu-4"   ,"NGLasso1-0.7500000000/relu-4"   ,"NGLasso1-1.0000000000/relu-4"   ],DIMs)
+func(TYPEs,["NBridge1-0.1250000000/relu-4-10","NBridge1-0.2500000000/relu-4-10","NBridge1-0.5000000000/relu-4-10","NBridge1-1.0000000000/relu-4-10","NBridge1-2.0000000000/relu-4-10"],DIMs)
 
 print(2)
 def func(TYPEs,METHs,DIMs):
@@ -60,12 +60,12 @@ def func(TYPEs,METHs,DIMs):
                     res += 1
             print(METHs[me],DIM,SIZEs[si],res)
 #
-TYPEs = ["non-additive-sq2"]
+TYPEs = ["non-additive-sq"]
 METHs = ["NGLasso1-0.0000000000/relu-4"   ,"NGLasso1-0.2500000000/relu-4"   ,"NGLasso1-0.5000000000/relu-4"   ,"NGLasso1-0.7500000000/relu-4"   ,"NGLasso1-1.0000000000/relu-4",
          "NBridge1-0.1250000000/relu-4-10","NBridge1-0.2500000000/relu-4-10","NBridge1-0.5000000000/relu-4-10","NBridge1-1.0000000000/relu-4-10","NBridge1-2.0000000000/relu-4-10",
          "LBridge1-1.0000000000","ABridge1-1.0000000000/relu-4","RandomForest"]
 DIMs   = [5,10,20]
-# func(TYPEs,METHs,DIMs)
+func(TYPEs,METHs,DIMs)
 
 print(3)
 def func(TYPEs,METHs,DIMs):
@@ -89,6 +89,6 @@ def func(TYPEs,METHs,DIMs):
                 res2 += 1
         print(METHs[0],DIM,SIZEs[si],res1,res2)
 #
-TYPEs = ["non-additive-sq2"]
+TYPEs = ["non-additive-sq"]
 DIMs   = [10]
 func(TYPEs,["NGLasso12-0.0000000000/relu-4"   ,"NGLasso12-0.2500000000/relu-4"   ,"NGLasso12-0.5000000000/relu-4"   ,"NGLasso12-0.7500000000/relu-4"   ,"NGLasso12-1.0000000000/relu-4"   ],DIMs)

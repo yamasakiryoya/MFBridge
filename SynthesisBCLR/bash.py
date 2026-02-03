@@ -9,7 +9,7 @@ import itertools
 from multiprocessing import Pool
 
 ACT,LAY,CUDA = "relu",4,-1
-TYPEs = ["non-additive-sq2"]
+TYPEs = ["non-additive-sq"]
 SIZEs = [25,50,100,200,400]
 
 def task():
@@ -37,16 +37,6 @@ def task():
     # NNSGLasso with weight-decay
     for TYPE,DIM,SIZE,ALP,LAM1,LAM2,SEED in itertools.product(TYPEs,[10],SIZEs,[0.0,.25,0.5,0.75,1.0],[10.**(i/4.-5.) for i in range(33)],[10.**i for i in [-5,-4,-3,-2,-1,0,1,2,3]],range(20)):
         subprocess.call("python NGLasso12.py --type %s --dim %d --size %d --alp %f --lam1 %s --lam2 %s --act %s --lay %d --seed %d --cuda %d"%(TYPE,DIM,SIZE,ALP,LAM1,LAM2,ACT,LAY,SEED,CUDA), shell=True)
-    # (SCAD, MCP, Log-Sum)
-    for TYPE,DIM,SIZE,SEED in itertools.product(TYPEs,[10],SIZEs,range(20)):
-        for ALP,LAM in itertools.product([1.,2.,3.,4.,5.],[10.**(i/4.-5.) for i in range(33)]):
-            subprocess.call("python NSCAD1.py --type %s --dim %d --size %d --alp %f --lam %s --Mnum 10 --act %s --lay %d --seed %d --cuda %d"%(TYPE,DIM,SIZE,ALP,LAM,ACT,LAY,SEED,CUDA), shell=True)
-        for ALP,LAM in itertools.product([1.,2.,3.,4.,5.],[10.**(i/4.-5.) for i in range(33)]):
-            subprocess.call("python NMCP1.py --type %s --dim %d --size %d --alp %f --lam %s --Mnum 10 --act %s --lay %d --seed %d --cuda %d"%(TYPE,DIM,SIZE,ALP,LAM,ACT,LAY,SEED,CUDA), shell=True)
-        for ALP,LAM in itertools.product([.1**1,.1**2,.1**3,.1**4,.1**5],[10.**(i/4.-5.) for i in range(33)]):
-            subprocess.call("python NLogSum1.py --type %s --dim %d --size %d --alp %f --lam %s --Mnum 10 --act %s --lay %d --seed %d --cuda %d"%(TYPE,DIM,SIZE,ALP,LAM,ACT,LAY,SEED,CUDA), shell=True)
-        for ALP,LAM in itertools.product([.25,.5,1.,2.,4.],[10.**(i/4.-5.) for i in range(33)]):
-            subprocess.call("python NAdaLasso1.py --type %s --dim %d --size %d --alp %f --lam %s --Mnum 10 --act %s --lay %d --seed %d --cuda %d"%(TYPE,DIM,SIZE,ALP,LAM,ACT,LAY,SEED,CUDA), shell=True)
 
 if __name__ == '__main__':
     task()

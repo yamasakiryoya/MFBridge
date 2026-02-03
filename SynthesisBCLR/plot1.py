@@ -26,8 +26,6 @@ def func(TYPEs,METHs,DIMs):
             tmp = np.loadtxt("./Results/NGLasso1-0.0000000000/relu-4/%s/dim-%d/size-%d/lam-%.10f/1-seed-%d.csv"%(TYPE,DIM,SIZEs[si],0.0,se), delimiter=",")
             res[si,se] = tmp[np.argmin(tmp[:,-4]),-2]
         #
-        #bp0 = ax.boxplot([res[0],res[1],res[2],res[3],res[4]], positions=[0,1,2,3,4], patch_artist=True, widths=0.5, medianprops=dict(color=color[0], linewidth=1.5), whiskerprops=dict(color=color[0], linewidth=1.5), capprops=dict(color=color[0], linewidth=1.5), flierprops=dict(markeredgecolor=color[0], markeredgewidth=1, marker="x"), boxprops={'fill': None}, showfliers=False)
-        #for b in bp0['boxes']: b.set_edgecolor(color[0]); b.set_linestyle("--"); b.set_linewidth(1.5); b.set_facecolor(None)
         for k in range(len(SIZEs)):
             ax.plot(k*np.ones(10), np.linspace(np.quantile(res[k], q=0.25), np.quantile(res[k], q=0.75), 10), lw=1.5, color=color[0])
             plt.plot(np.linspace(k-0.2,k+0.2,10), np.ones(10)*np.quantile(res[k], q=0.25), lw=1.5, color=color[0])
@@ -46,8 +44,6 @@ def func(TYPEs,METHs,DIMs):
                     tmp1[se], tmp2[se] = np.min(tmp[:,-4]), tmp[np.argmin(tmp[:,-4]),-2]
                     if tmp1[se]<tmp3[se]: tmp3[se] = tmp1[se]; res[si,se] = tmp2[se]
         #
-        #bp1 = ax.boxplot([res[0],res[1],res[2],res[3],res[4]], positions=[0,1,2,3,4], patch_artist=True, widths=0.5, medianprops=dict(color=color[1], linewidth=1.5), whiskerprops=dict(color=color[1], linewidth=1.5), capprops=dict(color=color[1], linewidth=1.5), flierprops=dict(markeredgecolor=color[1], markeredgewidth=1, marker="x"), boxprops={'fill': None}, showfliers=False)
-        #for b in bp1['boxes']: b.set_edgecolor(color[1]); b.set_linestyle("--"); b.set_linewidth(1.5); b.set_facecolor(None)
         for k in range(len(SIZEs)):
             ax.plot(k*np.ones(10), np.linspace(np.quantile(res[k], q=0.25), np.quantile(res[k], q=0.75), 10), lw=1.5, color=color[1])
             plt.plot(np.linspace(k-0.2,k+0.2,10), np.ones(10)*np.quantile(res[k], q=0.25), lw=1.5, color=color[1])
@@ -66,8 +62,6 @@ def func(TYPEs,METHs,DIMs):
                     tmp1[se], tmp2[se] = np.min(tmp[:,-4]), tmp[np.argmin(tmp[:,-4]),-2]
                     if tmp1[se]<tmp3[se]: tmp3[se] = tmp1[se]; res[si,se] = tmp2[se]
         #
-        #bp2 = ax.boxplot([res[0],res[1],res[2],res[3],res[4]], positions=[0,1,2,3,4], patch_artist=True, widths=0.5, medianprops=dict(color=color[2], linewidth=1.5), whiskerprops=dict(color=color[2], linewidth=1.5), capprops=dict(color=color[2], linewidth=1.5), flierprops=dict(markeredgecolor=color[2], markeredgewidth=1, marker="x"), boxprops={'fill': None}, showfliers=False)
-        #for b in bp2['boxes']: b.set_edgecolor(color[2]); b.set_linestyle("--"); b.set_linewidth(1.5); b.set_facecolor(None)
         for k in range(len(SIZEs)):
             ax.plot(k*np.ones(10), np.linspace(np.quantile(res[k], q=0.25), np.quantile(res[k], q=0.75), 10), lw=1.5, color=color[2])
             plt.plot(np.linspace(k-0.2,k+0.2,10), np.ones(10)*np.quantile(res[k], q=0.25), lw=1.5, color=color[2])
@@ -85,8 +79,6 @@ def func(TYPEs,METHs,DIMs):
                 tmp1[se], tmp2[se] = np.min(tmp[:,-4]), tmp[np.argmin(tmp[:,-4]),-2]
                 if tmp1[se]<tmp3[se]: tmp3[se] = tmp1[se]; res[si,se] = tmp2[se]
         #
-        #bp3 = ax.boxplot([res[0],res[1],res[2],res[3],res[4]], positions=[0,1,2,3,4], patch_artist=True, widths=0.5, medianprops=dict(color=color[3], linewidth=1.5), whiskerprops=dict(color=color[3], linewidth=1.5), capprops=dict(color=color[3], linewidth=1.5), flierprops=dict(markeredgecolor=color[3], markeredgewidth=1, marker="x"), boxprops={'fill': None}, showfliers=False)
-        #for b in bp3['boxes']: b.set_edgecolor(color[3]); b.set_linestyle("--"); b.set_linewidth(1.5); b.set_facecolor(None)
         for k in range(len(SIZEs)):
             ax.plot(k*np.ones(10), np.linspace(np.quantile(res[k], q=0.25), np.quantile(res[k], q=0.75), 10), lw=1.5, color=color[3])
             plt.plot(np.linspace(k-0.2,k+0.2,10), np.ones(10)*np.quantile(res[k], q=0.25), lw=1.5, color=color[3])
@@ -104,8 +96,6 @@ def func(TYPEs,METHs,DIMs):
                 tmp1[se], tmp2[se] = np.min(tmp[:,-4]), tmp[np.argmin(tmp[:,-4]),-2]
                 if tmp1[se]<tmp3[se]: tmp3[se] = tmp1[se]; res[si,se] = tmp2[se]
         #
-        #bp4 = ax.boxplot([res[0],res[1],res[2],res[3],res[4]], positions=[0,1,2,3,4], patch_artist=True, widths=0.5, medianprops=dict(color=color[4], linewidth=1.5), whiskerprops=dict(color=color[4], linewidth=1.5), capprops=dict(color=color[4], linewidth=1.5), flierprops=dict(markeredgecolor=color[4], markeredgewidth=1, marker="x"), boxprops={'fill': None}, showfliers=False)
-        #for b in bp4['boxes']: b.set_edgecolor(color[4]); b.set_linestyle("--"); b.set_linewidth(1.5); b.set_facecolor(None)
         for k in range(len(SIZEs)):
             ax.plot(k*np.ones(10), np.linspace(np.quantile(res[k], q=0.25), np.quantile(res[k], q=0.75), 10), lw=1.5, color=color[4])
             plt.plot(np.linspace(k-0.2,k+0.2,10), np.ones(10)*np.quantile(res[k], q=0.25), lw=1.5, color=color[4])
@@ -119,8 +109,6 @@ def func(TYPEs,METHs,DIMs):
             tmp = np.loadtxt("./Results/RandomForest/%s/dim-%d/size-%d/1-seed-%d.csv"%(TYPE,DIM,SIZEs[si],se), delimiter=",")
             res[si,se] = tmp[-2]
         #
-        #bp5 = ax.boxplot([res[0],res[1],res[2],res[3],res[4]], positions=[0,1,2,3,4], patch_artist=True, widths=0.5, medianprops=dict(color=color[5], linewidth=1.5), whiskerprops=dict(color=color[5], linewidth=1.5), capprops=dict(color=color[5], linewidth=1.5), flierprops=dict(markeredgecolor=color[5], markeredgewidth=1, marker="x"), boxprops={'fill': None}, showfliers=False)
-        #for b in bp5['boxes']: b.set_edgecolor(color[5]); b.set_linestyle("--"); b.set_linewidth(1.5); b.set_facecolor(None)
         for k in range(len(SIZEs)):
             ax.plot(k*np.ones(10), np.linspace(np.quantile(res[k], q=0.25), np.quantile(res[k], q=0.75), 10), lw=1.5, color=color[5])
             plt.plot(np.linspace(k-0.2,k+0.2,10), np.ones(10)*np.quantile(res[k], q=0.25), lw=1.5, color=color[5])
@@ -134,8 +122,6 @@ def func(TYPEs,METHs,DIMs):
             tmp = np.loadtxt("./Results/NGLasso1-0.0000000000/relu-4/%s/dim-%d/size-%d/lam-%.10f/1-seed-%d.csv"%(TYPE,3,SIZEs[si],0.0,se), delimiter=",")
             res[si,se] = tmp[np.argmin(tmp[:,-4]),-2]
         #
-        #bp6 = ax.boxplot([res[0],res[1],res[2],res[3],res[4]], positions=[0,1,2,3,4], patch_artist=True, widths=0.5, medianprops=dict(color=color[6], linewidth=1.5), whiskerprops=dict(color=color[6], linewidth=1.5), capprops=dict(color=color[6], linewidth=1.5), flierprops=dict(markeredgecolor=color[6], markeredgewidth=1, marker="x"), boxprops={'fill': None}, showfliers=False)
-        #for b in bp6['boxes']: b.set_edgecolor(color[6]); b.set_linestyle("--"); b.set_linewidth(1.5); b.set_facecolor(None)
         for k in range(len(SIZEs)):
             ax.plot(k*np.ones(10), np.linspace(np.quantile(res[k], q=0.25), np.quantile(res[k], q=0.75), 10), lw=1.5, color=color[6])
             plt.plot(np.linspace(k-0.2,k+0.2,10), np.ones(10)*np.quantile(res[k], q=0.25), lw=1.5, color=color[6])
@@ -154,8 +140,6 @@ def func(TYPEs,METHs,DIMs):
             tmp = np.loadtxt("./Results/NGLasso1-0.0000000000/relu-4/%s/dim-%d/size-%d/lam-%.10f/1-seed-%d.csv"%(TYPE,DIM,SIZEs[si],0.0,se), delimiter=",")
             res[si,se] = tmp[np.argmin(tmp[:,-3]),-1]
         #
-        #bp0 = ax.boxplot([res[0],res[1],res[2],res[3],res[4]], positions=[0,1,2,3,4], patch_artist=True, widths=0.5, medianprops=dict(color=color[0], linewidth=1.5), whiskerprops=dict(color=color[0], linewidth=1.5), capprops=dict(color=color[0], linewidth=1.5), flierprops=dict(markeredgecolor=color[0], markeredgewidth=1, marker="x"), boxprops={'fill': None}, showfliers=False)
-        #for b in bp0['boxes']: b.set_edgecolor(color[0]); b.set_linestyle("--"); b.set_linewidth(1.5); b.set_facecolor(None)
         for k in range(len(SIZEs)):
             ax.plot(k*np.ones(10), np.linspace(np.quantile(res[k], q=0.25), np.quantile(res[k], q=0.75), 10), lw=1.5, color=color[0])
             plt.plot(np.linspace(k-0.2,k+0.2,10), np.ones(10)*np.quantile(res[k], q=0.25), lw=1.5, color=color[0])
@@ -174,8 +158,6 @@ def func(TYPEs,METHs,DIMs):
                     tmp1[se], tmp2[se] = np.min(tmp[:,-3]), tmp[np.argmin(tmp[:,-3]),-1]
                     if tmp1[se]<tmp3[se]: tmp3[se] = tmp1[se]; res[si,se] = tmp2[se]
         #
-        #bp1 = ax.boxplot([res[0],res[1],res[2],res[3],res[4]], positions=[0,1,2,3,4], patch_artist=True, widths=0.5, medianprops=dict(color=color[1], linewidth=1.5), whiskerprops=dict(color=color[1], linewidth=1.5), capprops=dict(color=color[1], linewidth=1.5), flierprops=dict(markeredgecolor=color[1], markeredgewidth=1, marker="x"), boxprops={'fill': None}, showfliers=False)
-        #for b in bp1['boxes']: b.set_edgecolor(color[1]); b.set_linestyle("--"); b.set_linewidth(1.5); b.set_facecolor(None)
         for k in range(len(SIZEs)):
             ax.plot(k*np.ones(10), np.linspace(np.quantile(res[k], q=0.25), np.quantile(res[k], q=0.75), 10), lw=1.5, color=color[1])
             plt.plot(np.linspace(k-0.2,k+0.2,10), np.ones(10)*np.quantile(res[k], q=0.25), lw=1.5, color=color[1])
@@ -194,8 +176,6 @@ def func(TYPEs,METHs,DIMs):
                     tmp1[se], tmp2[se] = np.min(tmp[:,-3]), tmp[np.argmin(tmp[:,-3]),-1]
                     if tmp1[se]<tmp3[se]: tmp3[se] = tmp1[se]; res[si,se] = tmp2[se]
         #
-        #bp2 = ax.boxplot([res[0],res[1],res[2],res[3],res[4]], positions=[0,1,2,3,4], patch_artist=True, widths=0.5, medianprops=dict(color=color[2], linewidth=1.5), whiskerprops=dict(color=color[2], linewidth=1.5), capprops=dict(color=color[2], linewidth=1.5), flierprops=dict(markeredgecolor=color[2], markeredgewidth=1, marker="x"), boxprops={'fill': None}, showfliers=False)
-        #for b in bp2['boxes']: b.set_edgecolor(color[2]); b.set_linestyle("--"); b.set_linewidth(1.5); b.set_facecolor(None)
         for k in range(len(SIZEs)):
             ax.plot(k*np.ones(10), np.linspace(np.quantile(res[k], q=0.25), np.quantile(res[k], q=0.75), 10), lw=1.5, color=color[2])
             plt.plot(np.linspace(k-0.2,k+0.2,10), np.ones(10)*np.quantile(res[k], q=0.25), lw=1.5, color=color[2])
@@ -213,8 +193,6 @@ def func(TYPEs,METHs,DIMs):
                 tmp1[se], tmp2[se] = np.min(tmp[:,-3]), tmp[np.argmin(tmp[:,-3]),-1]
                 if tmp1[se]<tmp3[se]: tmp3[se] = tmp1[se]; res[si,se] = tmp2[se]
         #
-        #bp3 = ax.boxplot([res[0],res[1],res[2],res[3],res[4]], positions=[0,1,2,3,4], patch_artist=True, widths=0.5, medianprops=dict(color=color[3], linewidth=1.5), whiskerprops=dict(color=color[3], linewidth=1.5), capprops=dict(color=color[3], linewidth=1.5), flierprops=dict(markeredgecolor=color[3], markeredgewidth=1, marker="x"), boxprops={'fill': None}, showfliers=False)
-        #for b in bp3['boxes']: b.set_edgecolor(color[3]); b.set_linestyle("--"); b.set_linewidth(1.5); b.set_facecolor(None)
         for k in range(len(SIZEs)):
             ax.plot(k*np.ones(10), np.linspace(np.quantile(res[k], q=0.25), np.quantile(res[k], q=0.75), 10), lw=1.5, color=color[3])
             plt.plot(np.linspace(k-0.2,k+0.2,10), np.ones(10)*np.quantile(res[k], q=0.25), lw=1.5, color=color[3])
@@ -232,8 +210,6 @@ def func(TYPEs,METHs,DIMs):
                 tmp1[se], tmp2[se] = np.min(tmp[:,-3]), tmp[np.argmin(tmp[:,-3]),-1]
                 if tmp1[se]<tmp3[se]: tmp3[se] = tmp1[se]; res[si,se] = tmp2[se]
         #
-        #bp4 = ax.boxplot([res[0],res[1],res[2],res[3],res[4]], positions=[0,1,2,3,4], patch_artist=True, widths=0.5, medianprops=dict(color=color[4], linewidth=1.5), whiskerprops=dict(color=color[4], linewidth=1.5), capprops=dict(color=color[4], linewidth=1.5), flierprops=dict(markeredgecolor=color[4], markeredgewidth=1, marker="x"), boxprops={'fill': None}, showfliers=False)
-        #for b in bp4['boxes']: b.set_edgecolor(color[4]); b.set_linestyle("--"); b.set_linewidth(1.5); b.set_facecolor(None)
         for k in range(len(SIZEs)):
             ax.plot(k*np.ones(10), np.linspace(np.quantile(res[k], q=0.25), np.quantile(res[k], q=0.75), 10), lw=1.5, color=color[4])
             plt.plot(np.linspace(k-0.2,k+0.2,10), np.ones(10)*np.quantile(res[k], q=0.25), lw=1.5, color=color[4])
@@ -247,8 +223,6 @@ def func(TYPEs,METHs,DIMs):
             tmp = np.loadtxt("./Results/RandomForest/%s/dim-%d/size-%d/1-seed-%d.csv"%(TYPE,DIM,SIZEs[si],se), delimiter=",")
             res[si,se] = tmp[-1]
         #
-        #bp5 = ax.boxplot([res[0],res[1],res[2],res[3],res[4]], positions=[0,1,2,3,4], patch_artist=True, widths=0.5, medianprops=dict(color=color[5], linewidth=1.5), whiskerprops=dict(color=color[5], linewidth=1.5), capprops=dict(color=color[5], linewidth=1.5), flierprops=dict(markeredgecolor=color[5], markeredgewidth=1, marker="x"), boxprops={'fill': None}, showfliers=False)
-        #for b in bp5['boxes']: b.set_edgecolor(color[5]); b.set_linestyle("--"); b.set_linewidth(1.5); b.set_facecolor(None)
         for k in range(len(SIZEs)):
             ax.plot(k*np.ones(10), np.linspace(np.quantile(res[k], q=0.25), np.quantile(res[k], q=0.75), 10), lw=1.5, color=color[5])
             plt.plot(np.linspace(k-0.2,k+0.2,10), np.ones(10)*np.quantile(res[k], q=0.25), lw=1.5, color=color[5])
@@ -262,8 +236,6 @@ def func(TYPEs,METHs,DIMs):
             tmp = np.loadtxt("./Results/NGLasso1-0.0000000000/relu-4/%s/dim-%d/size-%d/lam-%.10f/1-seed-%d.csv"%(TYPE,3,SIZEs[si],0.0,se), delimiter=",")
             res[si,se] = tmp[np.argmin(tmp[:,-3]),-1]
         #
-        #bp6 = ax.boxplot([res[0],res[1],res[2],res[3],res[4]], positions=[0,1,2,3,4], patch_artist=True, widths=0.5, medianprops=dict(color=color[6], linewidth=1.5), whiskerprops=dict(color=color[6], linewidth=1.5), capprops=dict(color=color[6], linewidth=1.5), flierprops=dict(markeredgecolor=color[6], markeredgewidth=1, marker="x"), boxprops={'fill': None}, showfliers=False)
-        #for b in bp6['boxes']: b.set_edgecolor(color[6]); b.set_linestyle("--"); b.set_linewidth(1.5); b.set_facecolor(None)
         for k in range(len(SIZEs)):
             ax.plot(k*np.ones(10), np.linspace(np.quantile(res[k], q=0.25), np.quantile(res[k], q=0.75), 10), lw=1.5, color=color[6])
             plt.plot(np.linspace(k-0.2,k+0.2,10), np.ones(10)*np.quantile(res[k], q=0.25), lw=1.5, color=color[6])
@@ -275,8 +247,7 @@ def func(TYPEs,METHs,DIMs):
         plt.xticks(range(len(SIZEs)),SIZEs); plt.xlabel('n'); plt.ylabel('MCR'); plt.tight_layout()
         plt.savefig("./Plots/plot1/%s_dim-%d_miscla.png"%(TYPE,DIM), bbox_inches="tight", pad_inches=.02, dpi=200, facecolor=fig.get_facecolor(), edgecolor='none'); plt.close()
 #
-#"""
-TYPEs = ["non-additive-sq2"]#"non-additive-sq1",
+TYPEs = ["non-additive-sq"]
 METHs = ["NBridge1-0.1250000000/relu-4-10","NBridge1-0.2500000000/relu-4-10","NBridge1-0.5000000000/relu-4-10","NBridge1-1.0000000000/relu-4-10","NBridge1-2.0000000000/relu-4-10",
          "NGLasso1-0.0000000000/relu-4"   ,"NGLasso1-0.2500000000/relu-4"   ,"NGLasso1-0.5000000000/relu-4"   ,"NGLasso1-0.7500000000/relu-4"   ,"NGLasso1-1.0000000000/relu-4"   ]
 DIMs   = [10,5,20]
