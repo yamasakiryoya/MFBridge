@@ -1,6 +1,8 @@
 #import
 import os
 os.environ["OMP_NUM_THREADS"] = "1"
+os.environ["MKL_NUM_THREADS"] = "1"
+os.environ["OPENBLAS_NUM_THREADS"] = "1"
 import sys
 import argparse
 import numpy as np
@@ -44,7 +46,7 @@ if os.path.isdir("%s"%folder)==False: os.makedirs("%s"%folder)
 print("%s/seed-%d.csv"%(folder,SEED))
 if os.path.isfile("%s/1-seed-%d.csv"%(folder,SEED))==False:
     #dataset
-    XYful = np.genfromtxt("../Datasets/%s.csv"%DATA, delimiter=",", skip_header=1)
+    XYful = np.genfromtxt("./Datasets/%s.csv"%DATA, delimiter=",", skip_header=1)
     XYful = rd.permutation(XYful)
     XYtra, XYres = train_test_split(XYful, train_size=SIZE, random_state=SEED) #train SIZE
     XYval, XYtes = train_test_split(XYres, train_size=100,  random_state=SEED) #valid 100, test rest
@@ -54,8 +56,8 @@ if os.path.isfile("%s/1-seed-%d.csv"%(folder,SEED))==False:
     #
     Xmea = np.mean(XYful[:,:-1], axis=0); Xstd = np.std(XYful[:,:-1], axis=0)
     for j in range(Xmea.shape[0]):
-        if Xstd[j]!=0: Xtra = (Xtra-Xmea[j])/Xstd[j]; Xval = (Xval-Xmea[j])/Xstd[j]; Xtes = (Xtes-Xmea[j])/Xstd[j]
-        else: Xtra = (Xtra-Xmea[j]); Xval = (Xval-Xmea[j]); Xtes = (Xtes-Xmea[j])
+        if Xstd[j]==0: Xtra[:,j] = 0.; Xval[:,j] = 0.; Xtes[:,j] = 0.
+        else: Xtra[:,j] = (Xtra[:,j]-Xmea[j])/Xstd[j]; Xval[:,j] = (Xval[:,j]-Xmea[j])/Xstd[j]; Xtes[:,j] = (Xtes[:,j]-Xmea[j])/Xstd[j]
     Ymea = np.mean(XYful[:,-1]); Ystd = np.std(XYful[:,-1])
     if Ystd==0.0: Ytra = 0.; Yval = 0.; Ytes = 0.
     else: Ytra = (Ytra-Ymea)/Ystd; Yval = (Yval-Ymea)/Ystd; Ytes = (Ytes-Ymea)/Ystd
@@ -91,6 +93,16 @@ if os.path.isfile("%s/1-seed-%d.csv"%(folder,SEED))==False:
             FX1 = model(X1)
             loss = F.mse_loss(Y1, FX1)#/2.
             #
+            Mlist = torch.randint(SIZE, (M,), device=device)
+            X2 = X1[:, None, None, :].expand(Y1.shape[0], DIM, M, DIM).clone()
+            for j in range(DIM): X2[:, j, :, j] = Xtra[Mlist, j]
+            #
+            FX2 = model(X2.reshape(-1, DIM))
+            FX2 = FX2.view(Y1.shape[0], DIM, M, -1)
+            #
+            diff = FX1[:, None, None, :] - FX2
+            score = torch.sqrt(torch.mean(diff**2, dim=(0, 2, 3))/2./Y1.shape[0]+.1**6)
+            """
             score = torch.zeros(DIM).to(device)
             Mlist = rd.randint(SIZE, size=M).tolist()
             for j in range(DIM):
@@ -99,7 +111,8 @@ if os.path.isfile("%s/1-seed-%d.csv"%(folder,SEED))==False:
                     X12[:,j] = Xtra[Mlist,j]
                     FX12 = model(X12)
                     score[j] += torch.mean(torch.square(FX12-FX1[i,:]))
-            score = torch.sqrt(score/2./Y1.shape[0]+.1**8)
+            score = torch.sqrt(score/2./Y1.shape[0]+.1**6)
+            """
             pena = torch.sum(torch.pow(score, ALP))
             #
             obj = loss + LAM*pena

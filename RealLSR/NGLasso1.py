@@ -1,6 +1,8 @@
 #import
 import os
 os.environ["OMP_NUM_THREADS"] = "1"
+os.environ["MKL_NUM_THREADS"] = "1"
+os.environ["OPENBLAS_NUM_THREADS"] = "1"
 import sys
 import argparse
 import numpy as np
@@ -42,7 +44,7 @@ if os.path.isdir("%s"%folder)==False: os.makedirs("%s"%folder)
 print("%s/seed-%d.csv"%(folder,SEED))
 if os.path.isfile("%s/1-seed-%d.csv"%(folder,SEED))==False:
     #dataset
-    XYful = np.genfromtxt("../Datasets/%s.csv"%DATA, delimiter=",", skip_header=1)
+    XYful = np.genfromtxt("./Datasets/%s.csv"%DATA, delimiter=",", skip_header=1)
     XYful = rd.permutation(XYful)
     XYtra, XYres = train_test_split(XYful, train_size=SIZE, random_state=SEED) #train SIZE
     XYval, XYtes = train_test_split(XYres, train_size=100,  random_state=SEED) #valid 100, test rest
@@ -52,8 +54,8 @@ if os.path.isfile("%s/1-seed-%d.csv"%(folder,SEED))==False:
     #
     Xmea = np.mean(XYful[:,:-1], axis=0); Xstd = np.std(XYful[:,:-1], axis=0)
     for j in range(Xmea.shape[0]):
-        if Xstd[j]!=0: Xtra = (Xtra-Xmea[j])/Xstd[j]; Xval = (Xval-Xmea[j])/Xstd[j]; Xtes = (Xtes-Xmea[j])/Xstd[j]
-        else: Xtra = (Xtra-Xmea[j]); Xval = (Xval-Xmea[j]); Xtes = (Xtes-Xmea[j])
+        if Xstd[j]==0: Xtra[:,j] = 0.; Xval[:,j] = 0.; Xtes[:,j] = 0.
+        else: Xtra[:,j] = (Xtra[:,j]-Xmea[j])/Xstd[j]; Xval[:,j] = (Xval[:,j]-Xmea[j])/Xstd[j]; Xtes[:,j] = (Xtes[:,j]-Xmea[j])/Xstd[j]
     Ymea = np.mean(XYful[:,-1]); Ystd = np.std(XYful[:,-1])
     if Ystd==0.0: Ytra = 0.; Yval = 0.; Ytes = 0.
     else: Ytra = (Ytra-Ymea)/Ystd; Yval = (Yval-Ymea)/Ystd; Ytes = (Ytes-Ymea)/Ystd

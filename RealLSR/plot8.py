@@ -39,33 +39,21 @@ def func(DATAs,METHs):
         fig = plt.figure(figsize=(9,5)); cmap = plt.get_cmap('jet'); ax = fig.add_subplot(111); ax.grid(True); #plt.yscale('log')
         #
         k = 0
-        bp0 = ax.boxplot([res[k,0],res[k,1],res[k,2],res[k,3],res[k,4]], positions=[0,1,2,3,4], patch_artist=True, widths=0.4, medianprops=dict(color=color[k], linewidth=1.5), whiskerprops=dict(color=color[k], linewidth=1.5), capprops=dict(color=color[k], linewidth=1.5), flierprops=dict(markeredgecolor=color[k], markeredgewidth=1, marker="x"), boxprops={'fill': None})
-        for b in bp0['boxes']: b.set_edgecolor(color[k]); b.set_linestyle("--"); b.set_linewidth(1.5); b.set_facecolor(None)
         ax.plot(range(len(SIZEs)), np.mean(res[k,:,:], axis=1), lw=1.5, label="ERM", color=color[k])
         ax.scatter(range(len(SIZEs)), np.mean(res[k,:,:], axis=1),s=60, lw=1.5, facecolor='None', edgecolors=color[k], marker="o", zorder=3)
         k = 1
-        bp1 = ax.boxplot([res[k,0],res[k,1],res[k,2],res[k,3],res[k,4]], positions=[0,1,2,3,4], patch_artist=True, widths=0.4, medianprops=dict(color=color[k], linewidth=1.5), whiskerprops=dict(color=color[k], linewidth=1.5), capprops=dict(color=color[k], linewidth=1.5), flierprops=dict(markeredgecolor=color[k], markeredgewidth=1, marker="x"), boxprops={'fill': None})
-        for b in bp1['boxes']: b.set_edgecolor(color[k]); b.set_linestyle("--"); b.set_linewidth(1.5); b.set_facecolor(None)
         ax.plot(range(len(SIZEs)), np.mean(res[k,:,:], axis=1), lw=1.5, label=r"$q=0.125$", color=color[k])
         ax.scatter(range(len(SIZEs)), np.mean(res[k,:,:], axis=1),s=60, lw=1.5, facecolor='None', edgecolors=color[k], marker="o", zorder=3)
         k = 2
-        bp2 = ax.boxplot([res[k,0],res[k,1],res[k,2],res[k,3],res[k,4]], positions=[0,1,2,3,4], patch_artist=True, widths=0.4, medianprops=dict(color=color[k], linewidth=1.5), whiskerprops=dict(color=color[k], linewidth=1.5), capprops=dict(color=color[k], linewidth=1.5), flierprops=dict(markeredgecolor=color[k], markeredgewidth=1, marker="x"), boxprops={'fill': None})
-        for b in bp2['boxes']: b.set_edgecolor(color[k]); b.set_linestyle("--"); b.set_linewidth(1.5); b.set_facecolor(None)
         ax.plot(range(len(SIZEs)), np.mean(res[k,:,:], axis=1), lw=1.5, label=r"$q=0.25$", color=color[k])
         ax.scatter(range(len(SIZEs)), np.mean(res[k,:,:], axis=1),s=60, lw=1.5, facecolor='None', edgecolors=color[k], marker="o", zorder=3)
         k = 3
-        bp3 = ax.boxplot([res[k,0],res[k,1],res[k,2],res[k,3],res[k,4]], positions=[0,1,2,3,4], patch_artist=True, widths=0.4, medianprops=dict(color=color[k], linewidth=1.5), whiskerprops=dict(color=color[k], linewidth=1.5), capprops=dict(color=color[k], linewidth=1.5), flierprops=dict(markeredgecolor=color[k], markeredgewidth=1, marker="x"), boxprops={'fill': None})
-        for b in bp3['boxes']: b.set_edgecolor(color[k]); b.set_linestyle("--"); b.set_linewidth(1.5); b.set_facecolor(None)
         ax.plot(range(len(SIZEs)), np.mean(res[k,:,:], axis=1), lw=1.5, label=r"$q=0.5$", color=color[k])
         ax.scatter(range(len(SIZEs)), np.mean(res[k,:,:], axis=1),s=60, lw=1.5, facecolor='None', edgecolors=color[k], marker="o", zorder=3)
         k = 4
-        bp4 = ax.boxplot([res[k,0],res[k,1],res[k,2],res[k,3],res[k,4]], positions=[0,1,2,3,4], patch_artist=True, widths=0.4, medianprops=dict(color=color[k], linewidth=1.5), whiskerprops=dict(color=color[k], linewidth=1.5), capprops=dict(color=color[k], linewidth=1.5), flierprops=dict(markeredgecolor=color[k], markeredgewidth=1, marker="x"), boxprops={'fill': None})
-        for b in bp4['boxes']: b.set_edgecolor(color[k]); b.set_linestyle("--"); b.set_linewidth(1.5); b.set_facecolor(None)
         ax.plot(range(len(SIZEs)), np.mean(res[k,:,:], axis=1), lw=1.5, label=r"$q=1$", color=color[k])
         ax.scatter(range(len(SIZEs)), np.mean(res[k,:,:], axis=1),s=60, lw=1.5, facecolor='None', edgecolors=color[k], marker="o", zorder=3)
         k = 5
-        bp5 = ax.boxplot([res[k,0],res[k,1],res[k,2],res[k,3],res[k,4]], positions=[0,1,2,3,4], patch_artist=True, widths=0.4, medianprops=dict(color=color[k], linewidth=1.5), whiskerprops=dict(color=color[k], linewidth=1.5), capprops=dict(color=color[k], linewidth=1.5), flierprops=dict(markeredgecolor=color[k], markeredgewidth=1, marker="x"), boxprops={'fill': None})
-        for b in bp5['boxes']: b.set_edgecolor(color[k]); b.set_linestyle("--"); b.set_linewidth(1.5); b.set_facecolor(None)
         ax.plot(range(len(SIZEs)), np.mean(res[k,:,:], axis=1), lw=1.5, label=r"$q=2$", color=color[k])
         ax.scatter(range(len(SIZEs)), np.mean(res[k,:,:], axis=1),s=60, lw=1.5, facecolor='None', edgecolors=color[k], marker="o", zorder=3)
         #

@@ -1,6 +1,8 @@
 #import
 import os
 os.environ["OMP_NUM_THREADS"] = "1"
+os.environ["MKL_NUM_THREADS"] = "1"
+os.environ["OPENBLAS_NUM_THREADS"] = "1"
 import sys
 import argparse
 import numpy as np
@@ -39,12 +41,12 @@ torch.manual_seed(SEED)
 if args.cuda >= 0: device = torch.device("cuda:%d" % args.cuda)
 else: device = torch.device("cpu")
 
-folder = "./Results/ABridge1-%.10f/%s-%d-%d/%s/size-%d/lam-%.10f"%(ALP,ACT,LAY,M,DATA,SIZE,LAM)
+folder = "./Results/ABridge1-%.10f/%s-%d/%s/size-%d/lam-%.10f"%(ALP,ACT,LAY,DATA,SIZE,LAM)
 if os.path.isdir("%s/"%folder)==False: os.makedirs("%s/"%folder)
 print("%s/seed-%d.csv"%(folder,SEED))
 if os.path.isfile("%s/1-seed-%d.csv"%(folder,SEED))==False:
     #dataset
-    XYful = np.genfromtxt("../Datasets/%s.csv"%DATA, delimiter=",", skip_header=1)
+    XYful = np.genfromtxt("./Datasets/%s.csv"%DATA, delimiter=",", skip_header=1)
     XYful = rd.permutation(XYful)
     XYtra, XYres = train_test_split(XYful, train_size=SIZE, random_state=SEED) #train SIZE
     XYval, XYtes = train_test_split(XYres, train_size=100,  random_state=SEED) #valid 100, test rest
@@ -52,11 +54,10 @@ if os.path.isfile("%s/1-seed-%d.csv"%(folder,SEED))==False:
     Xval, Yval = torch.FloatTensor(XYval[:,:-1]), torch.LongTensor(XYval[:,-1].reshape(-1,1))
     Xtes, Ytes = torch.FloatTensor(XYtes[:,:-1]), torch.LongTensor(XYtes[:,-1].reshape(-1,1))
     #
-    if DATA!="naticusdroid+android+permissions":
-        Xmea = np.mean(XYful[:,:-1], axis=0); Xstd = np.std(XYful[:,:-1], axis=0)
-        for j in range(Xmea.shape[0]):
-            if Xstd[j]!=0: Xtra = (Xtra-Xmea[j])/Xstd[j]; Xval = (Xval-Xmea[j])/Xstd[j]; Xtes = (Xtes-Xmea[j])/Xstd[j]
-            else: Xtra = (Xtra-Xmea[j]); Xval = (Xval-Xmea[j]); Xtes = (Xtes-Xmea[j])
+    Xmea = np.mean(XYful[:,:-1], axis=0); Xstd = np.std(XYful[:,:-1], axis=0)
+    for j in range(Xmea.shape[0]):
+        if Xstd[j]==0: Xtra[:,j] = 0.; Xval[:,j] = 0.; Xtes[:,j] = 0.
+        else: Xtra[:,j] = (Xtra[:,j]-Xmea[j])/Xstd[j]; Xval[:,j] = (Xval[:,j]-Xmea[j])/Xstd[j]; Xtes[:,j] = (Xtes[:,j]-Xmea[j])/Xstd[j]
     #
     tra_loader = DataLoader(TensorDataset(Xtra, Ytra), batch_size=20, shuffle=True, drop_last=True)
     val_loader = DataLoader(TensorDataset(Xval, Yval), batch_size=20)
@@ -68,7 +69,7 @@ if os.path.isfile("%s/1-seed-%d.csv"%(folder,SEED))==False:
         def __init__(self, d, M):
             super(RegNet, self).__init__()
             if LAY>=2:
-                self.fc1 = nn.ModuleList([nn.Linear(d, M) for i in range(d)])
+                self.fc1 = nn.ModuleList([nn.Linear(1, M) for i in range(d)])
                 for j in range(d): torch.nn.init.normal_(self.fc1[j].weight, mean=.0, std=.1**2); torch.nn.init.normal_(self.fc1[j].bias, mean=.0, std=.1**2)
             if LAY>=3:
                 self.fc2 = nn.ModuleList([nn.Linear(M, M) for i in range(d)])
@@ -83,7 +84,7 @@ if os.path.isfile("%s/1-seed-%d.csv"%(folder,SEED))==False:
             f = []
             z = x
             for j in range(self.d):
-                if LAY>=2: x = eval("torch."+ACT)(self.fc1[j](z))
+                if LAY>=2: x = eval("torch."+ACT)(self.fc1[j](z[:,j].reshape(-1,1)))
                 if LAY>=3: x = eval("torch."+ACT)(self.fc2[j](x))
                 if LAY>=4: x = eval("torch."+ACT)(self.fc3[j](x))
                 x = self.fc4[j](x)
@@ -91,7 +92,7 @@ if os.path.isfile("%s/1-seed-%d.csv"%(folder,SEED))==False:
                 else: g += x
                 f.append(x)
             f.append(g)
-            return f
+            return torch.cat(f, dim=1)
 
 
     def train(tra_loader):
@@ -103,12 +104,15 @@ if os.path.isfile("%s/1-seed-%d.csv"%(folder,SEED))==False:
             optimizer.zero_grad()
             #
             FX1 = model(X1)
-            loss = -torch.mean(F.logsigmoid(FX1[-1])*Y1+F.logsigmoid(-FX1[-1])*(1-Y1))
+            loss = -torch.mean(F.logsigmoid(FX1[:,-1].reshape(-1,1))*Y1+F.logsigmoid(-FX1[:,-1].reshape(-1,1))*(1-Y1))
             #
+            score = torch.sqrt(torch.var(FX1[:,:-1], dim=0)+.1**6)
+            """
             score = torch.zeros(DIM).to(device)
             Mlist = rd.randint(SIZE, size=M).tolist()
             for j in range(DIM):
-                score[j] = torch.sqrt(torch.var(FX1[j])+.1**8)
+                score[j] = torch.sqrt(torch.var(FX1[j])+.1**6)
+            """
             pena = torch.sum(torch.pow(score, ALP))
             #
             obj = loss + LAM*pena
@@ -118,7 +122,7 @@ if os.path.isfile("%s/1-seed-%d.csv"%(folder,SEED))==False:
             tra_loss  += loss.item()
             tra_pena  += pena.item()
             tra_obj   += obj.item()
-            tra_acc   += (1.-torch.mean(torch.eq(FX1[-1]>0,Y1).float()).item())
+            tra_acc   += (1.-torch.mean(torch.eq(FX1[:,-1].reshape(-1,1)>0,Y1).float()).item())
             tra_score += score
         return np.concatenate([torch.tensor([tra_loss, tra_pena, tra_obj, tra_acc]).cpu().detach().numpy(), tra_score.cpu().detach().numpy()])/(batch_idx1+1)
 
@@ -131,10 +135,10 @@ if os.path.isfile("%s/1-seed-%d.csv"%(folder,SEED))==False:
                 optimizer.zero_grad()
                 #
                 FX = model(X)
-                loss = -torch.mean(F.logsigmoid(FX[-1])*Y+F.logsigmoid(-FX[-1])*(1-Y))
+                loss = -torch.mean(F.logsigmoid(FX[:,-1].reshape(-1,1))*Y+F.logsigmoid(-FX[:,-1].reshape(-1,1))*(1-Y))
                 #
                 tes_loss += loss.item()
-                tes_acc  += (1.-torch.mean(torch.eq(FX[-1]>0,Y).float()).item())
+                tes_acc  += (1.-torch.mean(torch.eq(FX[:,-1].reshape(-1,1)>0,Y).float()).item())
         return tes_loss/(batch_idx+1), tes_acc/(batch_idx+1)
 
     #learning
@@ -148,7 +152,7 @@ if os.path.isfile("%s/1-seed-%d.csv"%(folder,SEED))==False:
     for epoch in range(EPOCH):
         result[epoch,  :-4] = train(tra_loader)
         result[epoch,-4:-2] = test(val_loader)
-        if result[epoch,-4]<best_loss1:
+        if result[epoch,-4]<=best_loss1:
             best_epoch1, best_loss1 = epoch, result[epoch,-4]
             torch.save(model.state_dict(), "%s/1-seed-1-%d.pt"%(folder,SEED))
         if result[epoch,-3]<best_loss2:

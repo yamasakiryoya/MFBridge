@@ -1,6 +1,8 @@
 #import
 import os
 os.environ["OMP_NUM_THREADS"] = "1"
+os.environ["MKL_NUM_THREADS"] = "1"
+os.environ["OPENBLAS_NUM_THREADS"] = "1"
 import sys
 import argparse
 import numpy as np
@@ -39,12 +41,12 @@ torch.manual_seed(SEED)
 if args.cuda >= 0: device = torch.device("cuda:%d" % args.cuda)
 else: device = torch.device("cpu")
 
-folder = "./Results/ABridge1-%.10f/%s-%d-%d/%s/size-%d/lam-%.10f"%(ALP,ACT,LAY,M,DATA,SIZE,LAM)
+folder = "./Results/ABridge1-%.10f/%s-%d/%s/size-%d/lam-%.10f"%(ALP,ACT,LAY,DATA,SIZE,LAM)
 if os.path.isdir("%s"%folder)==False: os.makedirs("%s"%folder)
 print("%s/seed-%d.csv"%(folder,SEED))
 if os.path.isfile("%s/1-seed-%d.csv"%(folder,SEED))==False:
     #dataset
-    XYful = np.genfromtxt("../Datasets/%s.csv"%DATA, delimiter=",", skip_header=1)
+    XYful = np.genfromtxt("./Datasets/%s.csv"%DATA, delimiter=",", skip_header=1)
     XYful = rd.permutation(XYful)
     XYtra, XYres = train_test_split(XYful, train_size=SIZE, random_state=SEED) #train SIZE
     XYval, XYtes = train_test_split(XYres, train_size=100,  random_state=SEED) #valid 100, test rest
@@ -54,8 +56,8 @@ if os.path.isfile("%s/1-seed-%d.csv"%(folder,SEED))==False:
     #
     Xmea = np.mean(XYful[:,:-1], axis=0); Xstd = np.std(XYful[:,:-1], axis=0)
     for j in range(Xmea.shape[0]):
-        if Xstd[j]!=0: Xtra = (Xtra-Xmea[j])/Xstd[j]; Xval = (Xval-Xmea[j])/Xstd[j]; Xtes = (Xtes-Xmea[j])/Xstd[j]
-        else: Xtra = (Xtra-Xmea[j]); Xval = (Xval-Xmea[j]); Xtes = (Xtes-Xmea[j])
+        if Xstd[j]==0: Xtra[:,j] = 0.; Xval[:,j] = 0.; Xtes[:,j] = 0.
+        else: Xtra[:,j] = (Xtra[:,j]-Xmea[j])/Xstd[j]; Xval[:,j] = (Xval[:,j]-Xmea[j])/Xstd[j]; Xtes[:,j] = (Xtes[:,j]-Xmea[j])/Xstd[j]
     Ymea = np.mean(XYful[:,-1]); Ystd = np.std(XYful[:,-1])
     if Ystd==0.0: Ytra = 0.; Yval = 0.; Ytes = 0.
     else: Ytra = (Ytra-Ymea)/Ystd; Yval = (Yval-Ymea)/Ystd; Ytes = (Ytes-Ymea)/Ystd
@@ -70,7 +72,7 @@ if os.path.isfile("%s/1-seed-%d.csv"%(folder,SEED))==False:
         def __init__(self, d, M):
             super(RegNet, self).__init__()
             if LAY>=2:
-                self.fc1 = nn.ModuleList([nn.Linear(d, M) for i in range(d)])
+                self.fc1 = nn.ModuleList([nn.Linear(1, M) for i in range(d)])
                 for j in range(d): torch.nn.init.normal_(self.fc1[j].weight, mean=.0, std=.1**2); torch.nn.init.normal_(self.fc1[j].bias, mean=.0, std=.1**2)
             if LAY>=3:
                 self.fc2 = nn.ModuleList([nn.Linear(M, M) for i in range(d)])
@@ -85,7 +87,7 @@ if os.path.isfile("%s/1-seed-%d.csv"%(folder,SEED))==False:
             f = []
             z = x
             for j in range(self.d):
-                if LAY>=2: x = eval("torch."+ACT)(self.fc1[j](z))
+                if LAY>=2: x = eval("torch."+ACT)(self.fc1[j](z[:,j].reshape(-1,1)))
                 if LAY>=3: x = eval("torch."+ACT)(self.fc2[j](x))
                 if LAY>=4: x = eval("torch."+ACT)(self.fc3[j](x))
                 x = self.fc4[j](x)
@@ -93,7 +95,7 @@ if os.path.isfile("%s/1-seed-%d.csv"%(folder,SEED))==False:
                 else: g += x
                 f.append(x)
             f.append(g)
-            return f
+            return torch.cat(f, dim=1)
 
     def train(tra_loader):
         model.train()
@@ -104,12 +106,15 @@ if os.path.isfile("%s/1-seed-%d.csv"%(folder,SEED))==False:
             optimizer.zero_grad()
             #
             FX1 = model(X1)
-            loss = F.mse_loss(Y1, FX1[-1])#/2.
+            loss = F.mse_loss(Y1, FX1[:,-1].reshape(-1,1))#/2.
             #
+            score = torch.sqrt(torch.var(FX1[:,:-1], dim=0)+.1**6)
+            """
             score = torch.zeros(DIM).to(device)
             Mlist = rd.randint(SIZE, size=M).tolist()
             for j in range(DIM):
-                score[j] = torch.sqrt(torch.var(FX1[j])+.1**8)
+                score[j] = torch.sqrt(torch.var(FX1[j])+.1**6)
+            """
             pena = torch.sum(torch.pow(score, ALP))
             #
             obj = loss + LAM*pena
@@ -131,7 +136,7 @@ if os.path.isfile("%s/1-seed-%d.csv"%(folder,SEED))==False:
                 optimizer.zero_grad()
                 #
                 FX = model(X)
-                loss = F.mse_loss(FX[-1], Y)
+                loss = F.mse_loss(FX[:,-1].reshape(-1,1), Y)
                 #
                 tes_loss += loss.item()
         return tes_loss/(batch_idx+1)#/2.
