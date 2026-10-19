@@ -1,0 +1,1 @@
+mpiexec -n 16 python bash.py

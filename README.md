@@ -1,11 +1,24 @@
 # MFBridge
 
+Code for the experiments of the MFBridge paper.
 
-## Preparation
+| Folder | Contents |
+| --- | --- |
+| Synt-Reg/, Synt-Clas/ | Synthetic data experiments (regression / classification) |
+| Real-Reg/, Real-Clas/ | Real-world data experiments (regression / classification) |
+| Time-Reg/, Time-Cls/ | Computation time experiments (regression / classification) |
+
+Requirements: Python 3, PyTorch, NumPy, SciPy, scikit-learn, matplotlib, mpi4py and an MPI runtime (e.g. OpenMPI). The real-world plots use LaTeX (usetex=True).
+
+
+## Preparation (real-world data)
+
+1. Unzip Datasets.zip in Real-Reg/ and in Real-Clas/ so that Real-Reg/Datasets/ and Real-Clas/Datasets/ exist.
+2. Some datasets are too large to be included in this repository (GitHub file size limit). Download them separately and put them in Real-Reg/Datasets/ as follows.
 
 Download<br>
 pbc.csv, pharynx.csv, poker.csv, superconductivty.csv<br>
-to RealLSR/datasets/ from URLs in Table 7.
+to Real-Reg/Datasets/ from URLs in Table 3.
 
 These files are large and exceed GitHub's file size limit.
 
@@ -24,19 +37,39 @@ X = number_of_elements, mean_atomic_mass, wtd_mean_atomic_mass, gmean_atomic_mas
 Y = critical_temp<br>
 for superconductivty.csv.
 
-Or exclude them from experimental codes, bash.py, figure~.py, and table~.py, in RealLSR/.
 
-## Synthesis Data Experiments
+## Synthetic Data Experiments
 
-In SynthesisLSR/ or SynthesisBCLR/<br>
-bash.py<br>
-figure1~5.py<br>
-table1~3.py
+Run in Synt-Reg/ or Synt-Clas/:
+
+```
+source bash.sh
+```
+
+This runs all methods with mpiexec (16 processes), summarizes the results, and creates the figures.
 
 
 ## Real-World Data Experiments
 
-In RealLSR/ or RealBCLR/<br>
-bash.py<br>
-figure6.py<br>
-table1~3.py
+Run in Real-Reg/Codes/ or Real-Clas/Codes/:
+
+```
+source bash.sh
+```
+
+This runs all methods on all datasets with mpiexec (16 processes), then runs summary1.py, summary2.py and plot1.py.
+Results are saved in Results/ (summaries in Results/summary/). Delete Results/summary/ before re-running summaries, because existing summary files are skipped.
+
+
+## Computation Time Experiments
+
+Run in Time-Reg/ or Time-Cls/:
+
+```
+python bash.py
+python table1.py
+```
+
+bash.py measures the training time of each method (100 seeds, dim in {10, 20, 40}, M in {10, 20, 40}) and saves it in Results/.
+table1.py prints the table (mean and standard deviation) in LaTeX format.
+bash.py uses GPU 0 (CUDA = [0]); set it to [-1] to run on CPU.
